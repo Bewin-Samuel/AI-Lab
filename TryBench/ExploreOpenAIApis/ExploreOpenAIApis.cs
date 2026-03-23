@@ -17,20 +17,31 @@ namespace ExploreOpenAIApis
 
         private void InitClient()
         {
-            var GITHUB_TOKEN = "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";
-            //string apiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN")
-            //    ?? throw new InvalidOperationException("GITHUB_TOKEN environment variable is not set.");
+            string apiKey = Environment.GetEnvironmentVariable("GITHUB_TOKEN")
+                ?? throw new InvalidOperationException("GITHUB_TOKEN environment variable is not set.");
 
             OpenAIClientOptions options = new() { Endpoint = new Uri("https://models.inference.ai.azure.com") };
-            OpenAIClient = new OpenAIClient(new ApiKeyCredential(GITHUB_TOKEN), options);
+            OpenAIClient = new OpenAIClient(new ApiKeyCredential(apiKey), options);
         }
 
         private async void OnGoClickAsync(object sender, EventArgs e)
         {
-            ChatClientBasedResponse();
+            btnGo.Enabled = false;
+            try
+            {
+                await ChatClientBasedResponseAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Request Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnGo.Enabled = true;
+            }
         }
 
-        private async void ChatClientBasedResponse()
+        private async Task ChatClientBasedResponseAsync()
         {
             ChatClient chatClient = OpenAIClient.GetChatClient("gpt-4o");
             ChatCompletion response = await chatClient.CompleteChatAsync(txtPrompt.Text.Trim());
@@ -41,20 +52,9 @@ namespace ExploreOpenAIApis
             }
         }
 
-        //private async void RecommendedResponseBasedClient()
-        //{
-        //    var chatClient = OpenAIClient.CreateResponseClient("gpt-4o", ResponseType.ChatCompletion);
-        //    ChatCompletion response = await chatClient.CompleteChatAsync(txtPrompt.Text.Trim());
-
-        //    if (response != null)
-        //    {
-        //        txtResponse.Text += GetResponse(response);
-        //    }
-        //}
-
-        private string GetResponse(ChatCompletion response)
+        private static string GetResponse(ChatCompletion response)
         {
-            if (response == null || response.Content == null || response.Content.Count == 0)
+            if (response.Content == null || response.Content.Count == 0)
             {
                 return "No response received.";
             }

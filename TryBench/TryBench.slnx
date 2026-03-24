@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="ExploreOpenAIApis/ExploreOpenAIApis.csproj" />
+  <Project Path="QuizMaster/QuizMaster.csproj" Id="f19cc63e-99d6-4613-ba2d-27c6a805ee2e" />
 </Solution>

@@ -27,6 +27,7 @@ namespace ExploreOpenAIApis
         private async void OnGoClickAsync(object sender, EventArgs e)
         {
             btnGo.Enabled = false;
+
             try
             {
                 await ChatClientBasedResponseAsync();

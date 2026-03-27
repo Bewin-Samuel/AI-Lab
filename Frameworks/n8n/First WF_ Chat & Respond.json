@@ -1,0 +1,143 @@
+{
+  "name": "First WF: Chat & Respond",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1040,
+        -336
+      ],
+      "id": "1824c40d-8d9f-46e1-a7df-04ee81e4e3c2",
+      "name": "When chat message received",
+      "webhookId": "b1b3b824-15c9-4790-a7ab-b9824abe20d7"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -832,
+        -336
+      ],
+      "id": "036a7273-cab8-49c2-b77b-2ce683b1aac5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        -128
+      ],
+      "id": "534bd03b-b4bb-44d8-aa13-1b29682e1cb8",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "ZjSuZoguHGlWMLOU",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -816,
+        -128
+      ],
+      "id": "718f9ec8-1dcd-4e96-bbf4-8cf16ffc602f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "query": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavily",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -320
+      ],
+      "id": "13f85e69-a5b7-4587-bf26-b4e1bb3c04a5",
+      "name": "Search",
+      "credentials": {
+        "tavilyApi": {
+          "id": "tkO50cn58s9B9VVA",
+          "name": "Tavily account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fc82c8d7-c17d-48f9-b768-ab6b93cb26bb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "495b79e7fe228f267a60221638b63952a1ec9ea8152bdf858d4a1c3f08ccc105"
+  },
+  "id": "sa7rfOo0yifFTHnV",
+  "tags": []
+}

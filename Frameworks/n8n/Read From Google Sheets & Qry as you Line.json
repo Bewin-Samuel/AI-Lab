@@ -1,0 +1,177 @@
+{
+  "name": "Read From Google Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -672,
+        -336
+      ],
+      "id": "28fd5080-87eb-4208-b28f-8de69b66092c",
+      "name": "When chat message received",
+      "webhookId": "dbd93e10-4a65-49d5-9454-ce350d31768c"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -464,
+        -336
+      ],
+      "id": "ffe8349d-5b87-4339-a8fc-10e73077f576",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        -112
+      ],
+      "id": "7c063f4f-c5bc-4fcd-9eee-55410698c1bb",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "ZjSuZoguHGlWMLOU",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1lQxRfuEX51KxPZ6bd32Abmtww-8BrCMWj-F-y9O1FtM",
+          "mode": "list",
+          "cachedResultName": "Employee_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lQxRfuEX51KxPZ6bd32Abmtww-8BrCMWj-F-y9O1FtM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1607823507,
+          "mode": "list",
+          "cachedResultName": "ShortVersion",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1lQxRfuEX51KxPZ6bd32Abmtww-8BrCMWj-F-y9O1FtM/edit#gid=1607823507"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -176,
+        -112
+      ],
+      "id": "e5d8ee43-d130-4401-9332-22a1c959f227",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "uMmCqyvTcAf4I8on",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Employee Query Workflow Using Google Sheets\n\n## Overview\nThis workflow reads employee data from a **Google Sheet** and stores it in memory.  \nIt allows you to query the data using natural language and get intelligent responses.\n\n## How It Works\n1. The workflow connects to a **Google Sheet** containing employee data.  \n2. All records are loaded and stored in memory.  \n3. A user sends a query to the AI model.  \n4. The model processes the query against the stored data.  \n5. A structured and meaningful response is returned.\n\n## Example Queries\nYou can ask a wide range of questions, such as:\n- Get all employees  \n- List employees with a specific salary  \n- Group employees by gender and analyze salary  \n- Filter employees based on conditions  \n- Perform basic aggregations and insights  \n\n## What You’ll Learn\n- How to read data from **Google Sheets**  \n- How to store and manage data in memory  \n- How to query structured data using **natural language**  \n- How to build an AI-powered data assistant  \n\n## Output\nThe workflow returns:\n- Filtered employee lists  \n- Aggregated insights  \n- Structured responses based on your query  ",
+        "height": 704,
+        "width": 592
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -304
+      ],
+      "id": "b40a8dbc-b8dc-494b-ad14-750ad8a26dc0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -416,
+        -80
+      ],
+      "id": "42f169a2-df7a-4162-8a77-03c3ae8b64f4",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "ff0d79c0-68c5-4fef-b3dc-72747c021f9d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "495b79e7fe228f267a60221638b63952a1ec9ea8152bdf858d4a1c3f08ccc105"
+  },
+  "id": "2mzivtEjephpbl59",
+  "tags": []
+}

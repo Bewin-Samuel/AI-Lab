@@ -144,7 +144,7 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Key Validator";
-            Load += KevValidator_Load;
+            Load += OnFormLoad;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);

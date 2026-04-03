@@ -9,7 +9,13 @@
             InitializeComponent();
         }
 
-        private void KevValidator_Load(object sender, EventArgs e)
+        private void OnFormLoad(object sender, EventArgs e)
+        {
+            FormInCenterOfMdi();
+            LoadTypeDropdown();
+        }
+
+        private void FormInCenterOfMdi()
         {
             if (this.MdiParent != null)
             {
@@ -17,8 +23,6 @@
                 int y = (this.MdiParent.ClientSize.Height - this.Height) / 2;
                 this.Location = new Point(x < 0 ? 0 : x, y < 0 ? 0 : y);
             }
-
-            LoadTypeDropdown();
         }
 
         private void LoadTypeDropdown()

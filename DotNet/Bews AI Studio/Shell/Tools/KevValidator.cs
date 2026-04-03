@@ -377,5 +377,268 @@
             public int? TotalModelsAccessible { get; set; }
             public int? TotalFreeModels { get; set; }
         }
+
+        private async void OnModelDetailsClick(object sender, EventArgs e)
+        {
+            var key = txtKey.Text;
+
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                MessageBox.Show("Please enter a key.", "Model Details", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtKey.Focus();
+                return;
+            }
+
+            var keyType = cmbKeyType.SelectedItem?.ToString() ?? string.Empty;
+
+            btnModelDetails.Enabled = false;
+            btnKeyDetails.Enabled = false;
+            btnValidate.Enabled = false;
+            Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                InitializeModelGridColumns();
+                var models = await GetModelDetailsAsync(keyType, key.Trim());
+
+                dgvModels.Rows.Clear();
+                for (var i = 0; i < models.Count; i++)
+                {
+                    var model = models[i];
+                    dgvModels.Rows.Add(i + 1, model.ModelName, model.ModelId, model.ModelType);
+                }
+            }
+            catch
+            {
+                dgvModels.Rows.Clear();
+            }
+            finally
+            {
+                btnModelDetails.Enabled = true;
+                btnKeyDetails.Enabled = true;
+                btnValidate.Enabled = true;
+                Cursor = Cursors.Default;
+            }
+        }
+
+        private void InitializeModelGridColumns()
+        {
+            if (dgvModels.Columns.Count > 0)
+            {
+                return;
+            }
+
+            dgvModels.AutoGenerateColumns = false;
+            dgvModels.AllowUserToAddRows = false;
+            dgvModels.RowHeadersVisible = false;
+
+            dgvModels.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colSNo",
+                HeaderText = "S.No",
+                Width = 50,
+                SortMode = DataGridViewColumnSortMode.NotSortable,
+                ReadOnly = true
+            });
+
+            dgvModels.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colModelName",
+                HeaderText = "Model Name",
+                Width = 120,
+                SortMode = DataGridViewColumnSortMode.NotSortable,
+                ReadOnly = true
+            });
+
+            dgvModels.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colModelId",
+                HeaderText = "Model ID",
+                Width = 170,
+                SortMode = DataGridViewColumnSortMode.NotSortable,
+                ReadOnly = true
+            });
+
+            dgvModels.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colModelType",
+                HeaderText = "Model Type",
+                Width = 80,
+                SortMode = DataGridViewColumnSortMode.NotSortable,
+                ReadOnly = true
+            });
+        }
+
+        private static async Task<List<ModelDetailInfo>> GetModelDetailsAsync(string keyType, string key)
+        {
+            return keyType switch
+            {
+                "Open Router" => await GetOpenRouterModelsAsync(key),
+                "Gemini" => await GetGeminiModelsAsync(key),
+                "Hugging Face" => await GetHuggingFaceModelsAsync(key),
+                "GitHub" => await GetGitHubModelsAsync(key),
+                _ => new List<ModelDetailInfo>()
+            };
+        }
+
+        private static async Task<List<ModelDetailInfo>> GetOpenRouterModelsAsync(string key)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/models");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+
+            using var response = await HttpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<ModelDetailInfo>();
+            }
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
+            var models = new List<ModelDetailInfo>();
+
+            if (!document.RootElement.TryGetProperty("data", out var data) ||
+                data.ValueKind != System.Text.Json.JsonValueKind.Array)
+            {
+                return models;
+            }
+
+            foreach (var model in data.EnumerateArray())
+            {
+                var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
+                var modelName = model.TryGetProperty("name", out var nameElement) ? nameElement.GetString() ?? modelId : modelId;
+                var modelType = "Paid";
+
+                if (model.TryGetProperty("pricing", out var pricing))
+                {
+                    var prompt = GetDecimalProperty(pricing, "prompt");
+                    var completion = GetDecimalProperty(pricing, "completion");
+                    modelType = prompt.GetValueOrDefault() <= 0m && completion.GetValueOrDefault() <= 0m ? "Free" : "Paid";
+                }
+
+                models.Add(new ModelDetailInfo
+                {
+                    ModelName = modelName,
+                    ModelId = modelId,
+                    ModelType = modelType
+                });
+            }
+
+            return models;
+        }
+
+        private static async Task<List<ModelDetailInfo>> GetGeminiModelsAsync(string key)
+        {
+            var requestUri = $"https://generativelanguage.googleapis.com/v1beta/models?key={Uri.EscapeDataString(key)}";
+            using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+
+            using var response = await HttpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<ModelDetailInfo>();
+            }
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
+            var models = new List<ModelDetailInfo>();
+
+            if (!document.RootElement.TryGetProperty("models", out var modelArray) ||
+                modelArray.ValueKind != System.Text.Json.JsonValueKind.Array)
+            {
+                return models;
+            }
+
+            foreach (var model in modelArray.EnumerateArray())
+            {
+                var modelId = model.TryGetProperty("name", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
+                var modelName = model.TryGetProperty("displayName", out var nameElement) ? nameElement.GetString() ?? modelId : modelId;
+
+                models.Add(new ModelDetailInfo
+                {
+                    ModelName = modelName,
+                    ModelId = modelId,
+                    ModelType = "N/A"
+                });
+            }
+
+            return models;
+        }
+
+        private static async Task<List<ModelDetailInfo>> GetHuggingFaceModelsAsync(string key)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, "https://huggingface.co/api/models?limit=100");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+
+            using var response = await HttpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<ModelDetailInfo>();
+            }
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
+            var models = new List<ModelDetailInfo>();
+
+            if (document.RootElement.ValueKind != System.Text.Json.JsonValueKind.Array)
+            {
+                return models;
+            }
+
+            foreach (var model in document.RootElement.EnumerateArray())
+            {
+                var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
+                models.Add(new ModelDetailInfo
+                {
+                    ModelName = modelId,
+                    ModelId = modelId,
+                    ModelType = "N/A"
+                });
+            }
+
+            return models;
+        }
+
+        private static async Task<List<ModelDetailInfo>> GetGitHubModelsAsync(string key)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, "https://models.inference.ai.azure.com/models");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            request.Headers.UserAgent.ParseAdd("BewsAIStudio/1.0");
+
+            using var response = await HttpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<ModelDetailInfo>();
+            }
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
+            var models = new List<ModelDetailInfo>();
+
+            if (document.RootElement.ValueKind != System.Text.Json.JsonValueKind.Array)
+            {
+                return models;
+            }
+
+            foreach (var model in document.RootElement.EnumerateArray())
+            {
+                var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
+                var modelName = model.TryGetProperty("name", out var nameElement) ? nameElement.GetString() ?? modelId : modelId;
+
+                models.Add(new ModelDetailInfo
+                {
+                    ModelName = modelName,
+                    ModelId = modelId,
+                    ModelType = "N/A"
+                });
+            }
+
+            return models;
+        }
+
+        private sealed class ModelDetailInfo
+        {
+            public string ModelName { get; set; } = string.Empty;
+            public string ModelId { get; set; } = string.Empty;
+            public string ModelType { get; set; } = string.Empty;
+        }
     }
 }

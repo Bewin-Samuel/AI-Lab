@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            btnModelDetails = new Button();
+            btnKeyDetails = new Button();
             btnValidate = new Button();
             txtKey = new TextBox();
             label2 = new Label();
@@ -36,32 +38,58 @@
             label1 = new Label();
             groupBox2 = new GroupBox();
             lblKeyDetails = new Label();
-            btnKeyDetails = new Button();
+            groupBox3 = new GroupBox();
+            dgvModels = new DataGridView();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvModels).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnModelDetails);
             groupBox1.Controls.Add(btnKeyDetails);
             groupBox1.Controls.Add(btnValidate);
             groupBox1.Controls.Add(txtKey);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(cmbKeyType);
             groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(21, 27);
+            groupBox1.Location = new Point(12, 10);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(313, 159);
+            groupBox1.Size = new Size(508, 159);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Key Details";
             // 
+            // btnModelDetails
+            // 
+            btnModelDetails.BackColor = SystemColors.ScrollBar;
+            btnModelDetails.Location = new Point(320, 104);
+            btnModelDetails.Name = "btnModelDetails";
+            btnModelDetails.Size = new Size(75, 43);
+            btnModelDetails.TabIndex = 4;
+            btnModelDetails.Text = "Model &Details";
+            btnModelDetails.UseVisualStyleBackColor = false;
+            btnModelDetails.Click += OnModelDetailsClick;
+            // 
+            // btnKeyDetails
+            // 
+            btnKeyDetails.BackColor = SystemColors.ScrollBar;
+            btnKeyDetails.Location = new Point(217, 104);
+            btnKeyDetails.Name = "btnKeyDetails";
+            btnKeyDetails.Size = new Size(75, 43);
+            btnKeyDetails.TabIndex = 4;
+            btnKeyDetails.Text = "Key &Details";
+            btnKeyDetails.UseVisualStyleBackColor = false;
+            btnKeyDetails.Click += OnKeyDetailsClick;
+            // 
             // btnValidate
             // 
             btnValidate.BackColor = SystemColors.ScrollBar;
-            btnValidate.Location = new Point(51, 116);
+            btnValidate.Location = new Point(114, 104);
             btnValidate.Name = "btnValidate";
-            btnValidate.Size = new Size(75, 23);
+            btnValidate.Size = new Size(75, 43);
             btnValidate.TabIndex = 4;
             btnValidate.Text = "&Validate";
             btnValidate.UseVisualStyleBackColor = false;
@@ -69,16 +97,16 @@
             // 
             // txtKey
             // 
-            txtKey.Location = new Point(129, 74);
+            txtKey.Location = new Point(129, 68);
             txtKey.Name = "txtKey";
             txtKey.PasswordChar = '•';
-            txtKey.Size = new Size(168, 23);
+            txtKey.Size = new Size(304, 23);
             txtKey.TabIndex = 3;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(16, 78);
+            label2.Location = new Point(16, 72);
             label2.Name = "label2";
             label2.Size = new Size(26, 15);
             label2.TabIndex = 2;
@@ -90,7 +118,7 @@
             cmbKeyType.FormattingEnabled = true;
             cmbKeyType.Location = new Point(129, 32);
             cmbKeyType.Name = "cmbKeyType";
-            cmbKeyType.Size = new Size(168, 23);
+            cmbKeyType.Size = new Size(304, 23);
             cmbKeyType.TabIndex = 1;
             // 
             // label1
@@ -105,9 +133,9 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(lblKeyDetails);
-            groupBox2.Location = new Point(21, 201);
+            groupBox2.Location = new Point(12, 184);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(313, 150);
+            groupBox2.Size = new Size(508, 150);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Key Details";
@@ -117,26 +145,35 @@
             lblKeyDetails.Dock = DockStyle.Fill;
             lblKeyDetails.Location = new Point(3, 19);
             lblKeyDetails.Name = "lblKeyDetails";
-            lblKeyDetails.Size = new Size(307, 128);
+            lblKeyDetails.Size = new Size(502, 128);
             lblKeyDetails.TabIndex = 0;
             // 
-            // btnKeyDetails
+            // groupBox3
             // 
-            btnKeyDetails.BackColor = SystemColors.ScrollBar;
-            btnKeyDetails.Location = new Point(141, 116);
-            btnKeyDetails.Name = "btnKeyDetails";
-            btnKeyDetails.Size = new Size(75, 23);
-            btnKeyDetails.TabIndex = 4;
-            btnKeyDetails.Text = "Key &Details";
-            btnKeyDetails.UseVisualStyleBackColor = false;
-            btnKeyDetails.Click += OnKeyDetailsClick;
+            groupBox3.Controls.Add(dgvModels);
+            groupBox3.Location = new Point(12, 343);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(508, 403);
+            groupBox3.TabIndex = 2;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Model Details";
+            // 
+            // dgvModels
+            // 
+            dgvModels.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvModels.Dock = DockStyle.Fill;
+            dgvModels.Location = new Point(3, 19);
+            dgvModels.Name = "dgvModels";
+            dgvModels.Size = new Size(502, 381);
+            dgvModels.TabIndex = 0;
             // 
             // KevValidator
             // 
             AcceptButton = btnValidate;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(357, 363);
+            ClientSize = new Size(531, 752);
+            Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             MaximizeBox = false;
@@ -148,6 +185,8 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
+            groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvModels).EndInit();
             ResumeLayout(false);
         }
 
@@ -162,5 +201,8 @@
         private GroupBox groupBox2;
         private Label lblKeyDetails;
         private Button btnKeyDetails;
+        private GroupBox groupBox3;
+        private DataGridView dgvModels;
+        private Button btnModelDetails;
     }
 }

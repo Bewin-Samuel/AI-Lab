@@ -6,9 +6,8 @@ Debt Analyzer Agent
 """
 
 import json
-from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
-from agents.config import MODEL_NAME
+from agents.llm_factory import get_llm
 
 
 SYSTEM_PROMPT = """You are a debt analysis expert.
@@ -33,12 +32,8 @@ Return ONLY valid JSON:
 
 
 class DebtAnalyzerAgent:
-    def __init__(self, api_key: str):
-        self.llm = ChatOpenAI(
-            model=MODEL_NAME,
-            api_key=api_key,
-            temperature=0.2
-        )
+    def __init__(self, api_key: str, vendor: str, model_name: str):
+        self.llm = get_llm(api_key=api_key, vendor=vendor, model_name=model_name, temperature=0.2)
 
     def analyze(self, transactions: list, monthly_income: int) -> dict:
         if not transactions:

@@ -15,17 +15,22 @@ def run_financial_analysis(
     file_type: str,
     monthly_income: int,
     savings_goal: str,
-    api_key: str
+    api_key: str,
+    vendor: str,
+    model_name: str,
 ) -> dict:
     """
     Main entry point. Runs all agents in sequence and collects their outputs.
-    Returns a unified results dict for the Streamlit UI.
+    vendor and model_name come from the Streamlit UI — no config.json needed.
     """
+
+    # Shared kwargs passed to every agent
+    llm_kwargs = dict(api_key=api_key, vendor=vendor, model_name=model_name)
 
     agent_outputs = []
 
     # ── Step 1: Document Reader ───────────────────────────────────────────────
-    reader = DocumentReaderAgent(api_key=api_key)
+    reader = DocumentReaderAgent(**llm_kwargs)
     raw_text = reader.extract_text(file_content, file_type)
     parsed = reader.parse_transactions(raw_text)
     agent_outputs.append({
@@ -35,7 +40,7 @@ def run_financial_analysis(
     })
 
     # ── Step 2: Expense Classifier ────────────────────────────────────────────
-    classifier = ExpenseClassifierAgent(api_key=api_key)
+    classifier = ExpenseClassifierAgent(**llm_kwargs)
     categorized = classifier.categorize(parsed["transactions"])
     agent_outputs.append({
         "agent": "Expense Classifier Agent",
@@ -43,7 +48,7 @@ def run_financial_analysis(
     })
 
     # ── Step 3: Debt Analyzer ─────────────────────────────────────────────────
-    debt_agent = DebtAnalyzerAgent(api_key=api_key)
+    debt_agent = DebtAnalyzerAgent(**llm_kwargs)
     debt_analysis = debt_agent.analyze(parsed["transactions"], monthly_income)
     agent_outputs.append({
         "agent": "Debt Analyzer Agent",
@@ -51,7 +56,7 @@ def run_financial_analysis(
     })
 
     # ── Step 4: Savings Strategist ────────────────────────────────────────────
-    strategist = SavingsStrategistAgent(api_key=api_key)
+    strategist = SavingsStrategistAgent(**llm_kwargs)
     strategy = strategist.build_strategy(
         categorized=categorized,
         monthly_income=monthly_income,
@@ -64,7 +69,7 @@ def run_financial_analysis(
     })
 
     # ── Step 5: Report Builder ────────────────────────────────────────────────
-    reporter = ReportBuilderAgent(api_key=api_key)
+    reporter = ReportBuilderAgent(**llm_kwargs)
     report = reporter.build(
         categorized=categorized,
         strategy=strategy,

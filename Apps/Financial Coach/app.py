@@ -7,12 +7,12 @@ import json
 from agents.orchestrator import run_financial_analysis
 
 st.set_page_config(
-    page_title="AI Financial Coach",
+    page_title="AI Financial Coach Powered by Outskill C5:Group 3",   
     page_icon="💰",
     layout="wide"
 )
 
-# ── Styling ──────────────────────────────────────────────────────────────────
+# ── Styling ───────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
     .main { background: #0f1117; }
@@ -37,8 +37,48 @@ st.markdown("""
         font-size: 1rem; width: 100%; margin-top: 1rem;
     }
     .stButton > button:hover { background: #00b894; }
+    .hint-box {
+        background: #12162a; border: 1px solid #2a2d3e; border-radius: 8px;
+        padding: 0.7rem 1rem; margin-top: 0.4rem; font-size: 0.78rem; color: #888;
+    }
 </style>
 """, unsafe_allow_html=True)
+
+# ── Vendor config — defined here, used everywhere below ───────────────────────
+VENDOR_OPTIONS = {
+    "OpenAI":       {
+        "key": "openai",
+        "emoji": "🟢",
+        "placeholder": "sk-...",
+        "hint": "Get key: platform.openai.com → API keys",
+        "default_model": "gpt-4o-mini",
+        "model_hint": "e.g. gpt-4o-mini, gpt-4o, gpt-4-turbo"
+    },
+    "Gemini":       {
+        "key": "gemini",
+        "emoji": "🔵",
+        "placeholder": "AIza...",
+        "hint": "Get key: aistudio.google.com → Get API key (free)",
+        "default_model": "gemini-2.0-flash",
+        "model_hint": "e.g. gemini-2.0-flash, gemini-1.5-pro"
+    },
+    "OpenRouter":   {
+        "key": "openrouter",
+        "emoji": "🟠",
+        "placeholder": "sk-or-...",
+        "hint": "Get key: openrouter.ai → Keys  |  300+ models, pay-as-you-go",
+        "default_model": "google/gemini-2.0-flash-lite-001",
+        "model_hint": "e.g. openai/gpt-4o-mini, google/gemini-2.0-flash-lite-001, meta-llama/llama-3.1-8b-instruct:free"
+    },
+    "HuggingFace":  {
+        "key": "huggingface",
+        "emoji": "🟡",
+        "placeholder": "hf_...",
+        "hint": "Get key: huggingface.co → Settings → Access Tokens (free)",
+        "default_model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "model_hint": "e.g. mistralai/Mistral-7B-Instruct-v0.3, HuggingFaceH4/zephyr-7b-beta, Qwen/Qwen2.5-72B-Instruct"
+    },
+}
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("# 💰 AI Financial Coach")
@@ -48,7 +88,36 @@ st.divider()
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### ⚙️ Configuration")
-    api_key = st.text_input("OpenAI API Key", type="password", placeholder="sk-...")
+
+    # Vendor dropdown
+    selected_vendor_label = st.selectbox(
+        "AI Vendor",
+        options=list(VENDOR_OPTIONS.keys()),
+        index=0,
+        help="Choose which AI provider to use"
+    )
+    cfg = VENDOR_OPTIONS[selected_vendor_label]
+
+    # Model name text input — pre-filled with a good default
+    model_name = st.text_input(
+        "Model name",
+        value=cfg["default_model"],
+        placeholder=cfg["default_model"],
+        help="Type the exact model name for the selected vendor"
+    )
+    st.markdown(f'<div class="hint-box">💡 {cfg["model_hint"]}</div>', unsafe_allow_html=True)
+
+    st.markdown("")
+
+    # API key input — label and placeholder match selected vendor
+    api_key = st.text_input(
+        f"{cfg['emoji']} {selected_vendor_label} API Key",
+        type="password",
+        placeholder=cfg["placeholder"],
+        help=cfg["hint"]
+    )
+    st.markdown(f'<div class="hint-box">🔑 {cfg["hint"]}</div>', unsafe_allow_html=True)
+
     st.markdown("---")
     st.markdown("**Agents active:**")
     st.markdown("🔍 Document Reader")
@@ -125,7 +194,9 @@ with col2:
 # ── Run analysis on button click ──────────────────────────────────────────────
 if uploaded_file and "analyze_btn" in dir() and analyze_btn:
     if not api_key:
-        st.error("⚠️ Please enter your OpenAI API key in the sidebar.")
+        st.error(f"⚠️ Please enter your {selected_vendor_label} API key in the sidebar.")
+    elif not model_name:
+        st.error("⚠️ Please enter a model name in the sidebar.")
     else:
         with st.spinner("🤖 Agents are analyzing your finances..."):
             file_content = uploaded_file.read()
@@ -136,7 +207,9 @@ if uploaded_file and "analyze_btn" in dir() and analyze_btn:
                 file_type=file_type,
                 monthly_income=monthly_income,
                 savings_goal=savings_goal,
-                api_key=api_key
+                api_key=api_key,
+                vendor=cfg["key"],
+                model_name=model_name,
             )
             st.session_state.results = results
             st.rerun()

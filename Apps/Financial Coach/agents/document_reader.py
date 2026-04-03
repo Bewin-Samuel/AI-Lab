@@ -7,9 +7,8 @@ Document Reader Agent
 import io
 import csv
 import json
-from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
-from agents.config import MODEL_NAME
+from agents.llm_factory import get_llm
 
 
 SYSTEM_PROMPT = """You are a financial document parser.
@@ -27,12 +26,8 @@ If amounts are ambiguous, treat positive as credit (income) and negative as debi
 
 
 class DocumentReaderAgent:
-    def __init__(self, api_key: str):
-        self.llm = ChatOpenAI(
-            model=MODEL_NAME,
-            api_key=api_key,
-            temperature=0
-        )
+    def __init__(self, api_key: str, vendor: str, model_name: str):
+        self.llm = get_llm(api_key=api_key, vendor=vendor, model_name=model_name, temperature=0)
 
     def extract_text(self, file_content: bytes, file_type: str) -> str:
         """Extract raw text from the uploaded file."""

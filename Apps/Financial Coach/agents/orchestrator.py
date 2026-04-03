@@ -3,11 +3,11 @@ Orchestrator — coordinates all agents in sequence and returns a unified result
 Flow: DocumentReader → ExpenseClassifier → DebtAnalyzer → SavingsStrategist → ReportBuilder
 """
 
-from document_reader import DocumentReaderAgent
-from expense_classifier import ExpenseClassifierAgent
-from debt_analyzer import DebtAnalyzerAgent
-from savings_strategist import SavingsStrategistAgent
-from report_builder import ReportBuilderAgent
+from agents.document_reader import DocumentReaderAgent
+from agents.expense_classifier import ExpenseClassifierAgent
+from agents.debt_analyzer import DebtAnalyzerAgent
+from agents.savings_strategist import SavingsStrategistAgent
+from agents.report_builder import ReportBuilderAgent
 
 
 def run_financial_analysis(

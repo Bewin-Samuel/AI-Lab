@@ -7,6 +7,7 @@ Savings Strategist Agent
 import json
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
+from agents.config import MODEL_NAME
 
 
 SYSTEM_PROMPT = """You are a personal finance strategist specializing in the Indian market.
@@ -35,7 +36,7 @@ Be specific with Indian context: mention SIP, PPF, FD, UPI cashback, etc. where 
 class SavingsStrategistAgent:
     def __init__(self, api_key: str):
         self.llm = ChatOpenAI(
-            model="gpt-4o-mini",
+            model=MODEL_NAME,
             api_key=api_key,
             temperature=0.5
         )

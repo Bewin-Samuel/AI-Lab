@@ -7,6 +7,7 @@ Report Builder Agent
 import json
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
+from agents.config import MODEL_NAME
 
 
 SYSTEM_PROMPT = """You are a financial report writer.
@@ -32,7 +33,7 @@ Be warm and motivating, not alarming.
 class ReportBuilderAgent:
     def __init__(self, api_key: str):
         self.llm = ChatOpenAI(
-            model="gpt-4o-mini",
+            model=MODEL_NAME,
             api_key=api_key,
             temperature=0.4
         )

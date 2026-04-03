@@ -8,6 +8,7 @@ Expense Classifier Agent
 import json
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
+from agents.config import MODEL_NAME
 
 
 SYSTEM_PROMPT = """You are an expense categorization expert.
@@ -33,7 +34,7 @@ Only include debit transactions (expenses). Ignore credits/income.
 class ExpenseClassifierAgent:
     def __init__(self, api_key: str):
         self.llm = ChatOpenAI(
-            model="gpt-4o-mini",
+            model=MODEL_NAME,
             api_key=api_key,
             temperature=0
         )

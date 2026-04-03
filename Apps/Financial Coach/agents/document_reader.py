@@ -9,6 +9,7 @@ import csv
 import json
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
+from agents.config import MODEL_NAME
 
 
 SYSTEM_PROMPT = """You are a financial document parser.
@@ -28,7 +29,7 @@ If amounts are ambiguous, treat positive as credit (income) and negative as debi
 class DocumentReaderAgent:
     def __init__(self, api_key: str):
         self.llm = ChatOpenAI(
-            model="gpt-4o-mini",
+            model=MODEL_NAME,
             api_key=api_key,
             temperature=0
         )

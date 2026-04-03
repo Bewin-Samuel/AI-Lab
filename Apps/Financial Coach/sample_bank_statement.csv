@@ -1,0 +1,32 @@
+Date,Description,Amount,Type
+2024-03-01,Salary Credit,55000,credit
+2024-03-02,Zomato Order,-450,debit
+2024-03-03,Uber Ride,-180,debit
+2024-03-04,Netflix Subscription,-649,debit
+2024-03-05,DMart Grocery,-2300,debit
+2024-03-06,Home Loan EMI,-18000,debit
+2024-03-07,Swiggy Order,-320,debit
+2024-03-08,Petrol,-1500,debit
+2024-03-09,Electricity Bill,-1200,debit
+2024-03-10,Mobile Recharge,-299,debit
+2024-03-11,Amazon Purchase,-1850,debit
+2024-03-12,Doctor Visit,-500,debit
+2024-03-13,Zomato Order,-380,debit
+2024-03-14,Metro Card Recharge,-500,debit
+2024-03-15,Gym Membership,-999,debit
+2024-03-16,Grocery Store,-1800,debit
+2024-03-17,Car EMI,-8500,debit
+2024-03-18,Insurance Premium,-2500,debit
+2024-03-19,Restaurant Dinner,-1200,debit
+2024-03-20,Book Purchase,-450,debit
+2024-03-21,Uber Ride,-220,debit
+2024-03-22,Freelance Income,8000,credit
+2024-03-23,Electricity Bill (prev),-0,debit
+2024-03-24,Swiggy Order,-275,debit
+2024-03-25,ATM Withdrawal,-3000,debit
+2024-03-26,Movie Tickets,-600,debit
+2024-03-27,Grocery Store,-900,debit
+2024-03-28,Mutual Fund SIP,-3000,debit
+2024-03-29,Water Bill,-150,debit
+2024-03-30,Miscellaneous,-800,debit
+2024-03-31,Interest Credited,120,credit

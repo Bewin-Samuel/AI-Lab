@@ -53,7 +53,8 @@
             // keyValidatorToolStripMenuItem
             // 
             keyValidatorToolStripMenuItem.Name = "keyValidatorToolStripMenuItem";
-            keyValidatorToolStripMenuItem.Size = new Size(180, 22);
+            keyValidatorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.K;
+            keyValidatorToolStripMenuItem.Size = new Size(183, 22);
             keyValidatorToolStripMenuItem.Text = "&Key Validator";
             keyValidatorToolStripMenuItem.Click += OnKeyValidatorClick;
             // 
@@ -63,9 +64,12 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(menuStrip1);
+            IsMdiContainer = true;
             MainMenuStrip = menuStrip1;
             Name = "BewsAIStudio";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Bews AI Studio";
+            WindowState = FormWindowState.Maximized;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);

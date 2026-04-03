@@ -29,17 +29,22 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
-            label1 = new Label();
-            cmbKeyType = new ComboBox();
-            label2 = new Label();
+            btnValidate = new Button();
             txtKey = new TextBox();
-            btnSubmit = new Button();
+            label2 = new Label();
+            cmbKeyType = new ComboBox();
+            label1 = new Label();
+            groupBox2 = new GroupBox();
+            lblKeyDetails = new Label();
+            btnKeyDetails = new Button();
             groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(btnSubmit);
+            groupBox1.Controls.Add(btnKeyDetails);
+            groupBox1.Controls.Add(btnValidate);
             groupBox1.Controls.Add(txtKey);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(cmbKeyType);
@@ -51,22 +56,24 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Key Details";
             // 
-            // label1
+            // btnValidate
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(16, 36);
-            label1.Name = "label1";
-            label1.Size = new Size(32, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Type";
+            btnValidate.BackColor = SystemColors.ScrollBar;
+            btnValidate.Location = new Point(51, 116);
+            btnValidate.Name = "btnValidate";
+            btnValidate.Size = new Size(75, 23);
+            btnValidate.TabIndex = 4;
+            btnValidate.Text = "&Validate";
+            btnValidate.UseVisualStyleBackColor = false;
+            btnValidate.Click += OnKeyValidateClick;
             // 
-            // cmbKeyType
+            // txtKey
             // 
-            cmbKeyType.FormattingEnabled = true;
-            cmbKeyType.Location = new Point(129, 32);
-            cmbKeyType.Name = "cmbKeyType";
-            cmbKeyType.Size = new Size(168, 23);
-            cmbKeyType.TabIndex = 1;
+            txtKey.Location = new Point(129, 74);
+            txtKey.Name = "txtKey";
+            txtKey.PasswordChar = '•';
+            txtKey.Size = new Size(168, 23);
+            txtKey.TabIndex = 3;
             // 
             // label2
             // 
@@ -77,48 +84,83 @@
             label2.TabIndex = 2;
             label2.Text = "Key";
             // 
-            // txtKey
+            // cmbKeyType
             // 
-            txtKey.Location = new Point(129, 74);
-            txtKey.Name = "txtKey";
-            txtKey.PasswordChar = '•';
-            txtKey.Size = new Size(168, 23);
-            txtKey.TabIndex = 3;
+            cmbKeyType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbKeyType.FormattingEnabled = true;
+            cmbKeyType.Location = new Point(129, 32);
+            cmbKeyType.Name = "cmbKeyType";
+            cmbKeyType.Size = new Size(168, 23);
+            cmbKeyType.TabIndex = 1;
             // 
-            // btnSubmit
+            // label1
             // 
-            btnSubmit.BackColor = SystemColors.ScrollBar;
-            btnSubmit.Location = new Point(117, 121);
-            btnSubmit.Name = "btnSubmit";
-            btnSubmit.Size = new Size(75, 23);
-            btnSubmit.TabIndex = 4;
-            btnSubmit.Text = "&Submit";
-            btnSubmit.UseVisualStyleBackColor = false;
+            label1.AutoSize = true;
+            label1.Location = new Point(16, 36);
+            label1.Name = "label1";
+            label1.Size = new Size(32, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Type";
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(lblKeyDetails);
+            groupBox2.Location = new Point(21, 201);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(313, 150);
+            groupBox2.TabIndex = 1;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Key Details";
+            // 
+            // lblKeyDetails
+            // 
+            lblKeyDetails.Dock = DockStyle.Fill;
+            lblKeyDetails.Location = new Point(3, 19);
+            lblKeyDetails.Name = "lblKeyDetails";
+            lblKeyDetails.Size = new Size(307, 128);
+            lblKeyDetails.TabIndex = 0;
+            // 
+            // btnKeyDetails
+            // 
+            btnKeyDetails.BackColor = SystemColors.ScrollBar;
+            btnKeyDetails.Location = new Point(141, 116);
+            btnKeyDetails.Name = "btnKeyDetails";
+            btnKeyDetails.Size = new Size(75, 23);
+            btnKeyDetails.TabIndex = 4;
+            btnKeyDetails.Text = "Key &Details";
+            btnKeyDetails.UseVisualStyleBackColor = false;
+            btnKeyDetails.Click += OnKeyDetailsClick;
             // 
             // KevValidator
             // 
-            AcceptButton = btnSubmit;
+            AcceptButton = btnValidate;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(357, 209);
+            ClientSize = new Size(357, 363);
+            Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             MaximizeBox = false;
             Name = "KevValidator";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Key Validator";
+            Load += KevValidator_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            groupBox2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
         private GroupBox groupBox1;
-        private Button btnSubmit;
+        private Button btnValidate;
         private TextBox txtKey;
         private Label label2;
         private ComboBox cmbKeyType;
         private Label label1;
+        private GroupBox groupBox2;
+        private Label lblKeyDetails;
+        private Button btnKeyDetails;
     }
 }

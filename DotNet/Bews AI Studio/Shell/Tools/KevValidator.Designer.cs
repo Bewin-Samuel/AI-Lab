@@ -39,6 +39,8 @@
             groupBox2 = new GroupBox();
             lblKeyDetails = new Label();
             groupBox3 = new GroupBox();
+            txtModelSearch = new TextBox();
+            lblModelSearch = new Label();
             dgvModels = new DataGridView();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -150,6 +152,8 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(txtModelSearch);
+            groupBox3.Controls.Add(lblModelSearch);
             groupBox3.Controls.Add(dgvModels);
             groupBox3.Location = new Point(12, 343);
             groupBox3.Name = "groupBox3";
@@ -158,13 +162,29 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Model Details";
             // 
+            // txtModelSearch
+            // 
+            txtModelSearch.Location = new Point(85, 23);
+            txtModelSearch.Name = "txtModelSearch";
+            txtModelSearch.Size = new Size(417, 23);
+            txtModelSearch.TabIndex = 2;
+            txtModelSearch.TextChanged += OnModelSearchTextChanged;
+            // 
+            // lblModelSearch
+            // 
+            lblModelSearch.AutoSize = true;
+            lblModelSearch.Location = new Point(6, 27);
+            lblModelSearch.Name = "lblModelSearch";
+            lblModelSearch.Size = new Size(42, 15);
+            lblModelSearch.TabIndex = 1;
+            lblModelSearch.Text = "Search";
+            // 
             // dgvModels
             // 
             dgvModels.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvModels.Dock = DockStyle.Fill;
-            dgvModels.Location = new Point(3, 19);
+            dgvModels.Location = new Point(6, 56);
             dgvModels.Name = "dgvModels";
-            dgvModels.Size = new Size(502, 381);
+            dgvModels.Size = new Size(496, 341);
             dgvModels.TabIndex = 0;
             // 
             // KevValidator
@@ -204,5 +224,7 @@
         private GroupBox groupBox3;
         private DataGridView dgvModels;
         private Button btnModelDetails;
+        private TextBox txtModelSearch;
+        private Label lblModelSearch;
     }
 }

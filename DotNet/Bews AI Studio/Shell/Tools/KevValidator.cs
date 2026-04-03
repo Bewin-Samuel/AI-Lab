@@ -3,6 +3,7 @@
     public partial class KevValidator : Form
     {
         private static readonly HttpClient HttpClient = new();
+        private List<ModelDetailInfo> _allModels = new();
 
         public KevValidator()
         {
@@ -440,17 +441,12 @@
             try
             {
                 InitializeModelGridColumns();
-                var models = await GetModelDetailsAsync(keyType, key.Trim());
-
-                dgvModels.Rows.Clear();
-                for (var i = 0; i < models.Count; i++)
-                {
-                    var model = models[i];
-                    dgvModels.Rows.Add(i + 1, model.ModelName, model.ModelId, model.ModelType, model.Params);
-                }
+                _allModels = await GetModelDetailsAsync(keyType, key.Trim());
+                ApplyModelFilter();
             }
             catch
             {
+                _allModels = new List<ModelDetailInfo>();
                 dgvModels.Rows.Clear();
             }
             finally
@@ -787,5 +783,41 @@
             };
         }
 
+        private void OnModelSearchTextChanged(object? sender, EventArgs e)
+        {
+            ApplyModelFilter();
+        }
+
+        private void ApplyModelFilter()
+        {
+            var query = txtModelSearch.Text.Trim();
+            IEnumerable<ModelDetailInfo> filtered = _allModels;
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                filtered = _allModels.Where(model =>
+                    ContainsIgnoreCase(model.ModelName, query) ||
+                    ContainsIgnoreCase(model.ModelId, query) ||
+                    ContainsIgnoreCase(model.ModelType, query) ||
+                    ContainsIgnoreCase(model.Params, query));
+            }
+
+            BindModelGrid(filtered.ToList());
+        }
+
+        private void BindModelGrid(List<ModelDetailInfo> models)
+        {
+            dgvModels.Rows.Clear();
+
+            for (var i = 0; i < models.Count; i++)
+            {
+                var model = models[i];
+                dgvModels.Rows.Add(i + 1, model.ModelName, model.ModelId, model.ModelType, model.Params);
             }
         }
+
+        private static bool ContainsIgnoreCase(string source, string value) =>
+            source.Contains(value, StringComparison.OrdinalIgnoreCase);
+
+    }
+}

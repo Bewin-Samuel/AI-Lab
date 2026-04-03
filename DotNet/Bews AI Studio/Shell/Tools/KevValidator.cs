@@ -30,9 +30,12 @@
             cmbKeyType.Items.Clear();
 
             cmbKeyType.Items.Add("Open Router");
+            cmbKeyType.Items.Add("Open AI");
             cmbKeyType.Items.Add("Hugging Face");
             cmbKeyType.Items.Add("Gemini");
             cmbKeyType.Items.Add("GitHub");
+
+            cmbKeyType.Sorted = true;
 
             cmbKeyType.SelectedIndex = 0;
         }
@@ -83,11 +86,21 @@
             return keyType switch
             {
                 "Open Router" => await ValidateOpenRouterKeyAsync(normalizedKey),
+                "Open AI" => await ValidateOpenAiKeyAsync(normalizedKey),
                 "Hugging Face" => await ValidateHuggingFaceKeyAsync(normalizedKey),
                 "Gemini" => await ValidateGeminiKeyAsync(normalizedKey),
                 "GitHub" => await ValidateGitHubKeyAsync(normalizedKey),
                 _ => false
             };
+        }
+
+        private static async Task<bool> ValidateOpenAiKeyAsync(string key)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+
+            using var response = await HttpClient.SendAsync(request);
+            return response.IsSuccessStatusCode;
         }
 
         private static async Task<bool> ValidateOpenRouterKeyAsync(string key)
@@ -167,11 +180,39 @@
             return keyType switch
             {
                 "Open Router" => await GetOpenRouterKeyDetailsAsync(key),
+                "Open AI" => await GetOpenAiKeyDetailsAsync(key),
                 "Hugging Face" => await GetHuggingFaceKeyDetailsAsync(key),
                 "Gemini" => await GetGeminiKeyDetailsAsync(key),
                 "GitHub" => await GetGitHubKeyDetailsAsync(key),
                 _ => new KeyDetailsInfo()
             };
+        }
+
+        private static async Task<KeyDetailsInfo> GetOpenAiKeyDetailsAsync(string key)
+        {
+            var details = new KeyDetailsInfo();
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+
+            using var response = await HttpClient.SendAsync(request);
+            details.Active = response.IsSuccessStatusCode;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return details;
+            }
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
+
+            if (document.RootElement.TryGetProperty("data", out var models) &&
+                models.ValueKind == System.Text.Json.JsonValueKind.Array)
+            {
+                details.TotalModelsAccessible = models.GetArrayLength();
+            }
+
+            return details;
         }
 
         private static async Task<KeyDetailsInfo> GetOpenRouterKeyDetailsAsync(string key)
@@ -483,11 +524,50 @@
             return keyType switch
             {
                 "Open Router" => await GetOpenRouterModelsAsync(key),
+                "Open AI" => await GetOpenAiModelsAsync(key),
                 "Gemini" => await GetGeminiModelsAsync(key),
                 "Hugging Face" => await GetHuggingFaceModelsAsync(key),
                 "GitHub" => await GetGitHubModelsAsync(key),
                 _ => new List<ModelDetailInfo>()
             };
+        }
+
+        private static async Task<List<ModelDetailInfo>> GetOpenAiModelsAsync(string key)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+
+            using var response = await HttpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<ModelDetailInfo>();
+            }
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
+            var models = new List<ModelDetailInfo>();
+
+            if (!document.RootElement.TryGetProperty("data", out var data) ||
+                data.ValueKind != System.Text.Json.JsonValueKind.Array)
+            {
+                return models;
+            }
+
+            foreach (var model in data.EnumerateArray())
+            {
+                var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
+                var modelName = modelId;
+
+                models.Add(new ModelDetailInfo
+                {
+                    ModelName = modelName,
+                    ModelId = modelId,
+                    ModelType = "N/A",
+                    Params = ExtractParamsFromName(modelId, modelName)
+                });
+            }
+
+            return models;
         }
 
         private static async Task<List<ModelDetailInfo>> GetOpenRouterModelsAsync(string key)

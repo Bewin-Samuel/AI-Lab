@@ -405,7 +405,7 @@
                 for (var i = 0; i < models.Count; i++)
                 {
                     var model = models[i];
-                    dgvModels.Rows.Add(i + 1, model.ModelName, model.ModelId, model.ModelType);
+                    dgvModels.Rows.Add(i + 1, model.ModelName, model.ModelId, model.ModelType, model.Params);
                 }
             }
             catch
@@ -467,6 +467,15 @@
                 SortMode = DataGridViewColumnSortMode.NotSortable,
                 ReadOnly = true
             });
+
+            dgvModels.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colParams",
+                HeaderText = "Params",
+                Width = 90,
+                SortMode = DataGridViewColumnSortMode.NotSortable,
+                ReadOnly = true
+            });
         }
 
         private static async Task<List<ModelDetailInfo>> GetModelDetailsAsync(string keyType, string key)
@@ -519,7 +528,8 @@
                 {
                     ModelName = modelName,
                     ModelId = modelId,
-                    ModelType = modelType
+                    ModelType = modelType,
+                    Params = ExtractParamsFromName(modelId, modelName)
                 });
             }
 
@@ -556,7 +566,8 @@
                 {
                     ModelName = modelName,
                     ModelId = modelId,
-                    ModelType = "N/A"
+                    ModelType = "N/A",
+                    Params = ExtractParamsFromName(modelId, modelName)
                 });
             }
 
@@ -586,11 +597,13 @@
             foreach (var model in document.RootElement.EnumerateArray())
             {
                 var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
+                var hfParams = TryGetHuggingFaceParams(model);
                 models.Add(new ModelDetailInfo
                 {
                     ModelName = modelId,
                     ModelId = modelId,
-                    ModelType = "N/A"
+                    ModelType = "N/A",
+                    Params = hfParams ?? ExtractParamsFromName(modelId)
                 });
             }
 
@@ -627,7 +640,8 @@
                 {
                     ModelName = modelName,
                     ModelId = modelId,
-                    ModelType = "N/A"
+                    ModelType = "N/A",
+                    Params = ExtractParamsFromName(modelId, modelName)
                 });
             }
 
@@ -639,6 +653,59 @@
             public string ModelName { get; set; } = string.Empty;
             public string ModelId { get; set; } = string.Empty;
             public string ModelType { get; set; } = string.Empty;
+            public string Params { get; set; } = "N/A";
         }
-    }
-}
+
+        private static string ExtractParamsFromName(params string[] names)
+        {
+            var regex = new System.Text.RegularExpressions.Regex(@"(\d+\.?\d*)[xX]?(\d+\.?\d*)?[\s\-_]?[bB]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+            foreach (var name in names)
+            {
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
+                var match = regex.Match(name);
+                if (match.Success)
+                {
+                    return match.Value.Trim('-', '_', ' ').ToUpperInvariant();
+                }
+            }
+
+            return "N/A";
+        }
+
+        private static string? TryGetHuggingFaceParams(System.Text.Json.JsonElement model)
+        {
+            if (!model.TryGetProperty("safetensors", out var safetensors) ||
+                safetensors.ValueKind != System.Text.Json.JsonValueKind.Object)
+            {
+                return null;
+            }
+
+            if (!safetensors.TryGetProperty("total", out var total) ||
+                total.ValueKind != System.Text.Json.JsonValueKind.Number ||
+                !total.TryGetInt64(out var totalParams) ||
+                totalParams <= 0)
+            {
+                return null;
+            }
+
+            return FormatParamCount(totalParams);
+        }
+
+        private static string FormatParamCount(long count)
+        {
+            return count switch
+            {
+                >= 1_000_000_000 => $"{count / 1_000_000_000d:0.##}B",
+                >= 1_000_000 => $"{count / 1_000_000d:0.##}M",
+                >= 1_000 => $"{count / 1_000d:0.##}K",
+                _ => count.ToString()
+            };
+        }
+
+            }
+        }

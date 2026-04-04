@@ -43,6 +43,8 @@ class ExpenseClassifierAgent:
         if not debits:
             debits = transactions  # fallback if types not tagged
 
+        print("ExpenseClassifierAgent: debit count", len(debits))
+
         tx_text = json.dumps(debits[:50], indent=2)  # cap at 50 for tokens
 
         messages = [
@@ -51,6 +53,9 @@ class ExpenseClassifierAgent:
         ]
 
         response = self.llm.invoke(messages)
+        print("ExpenseClassifierAgent - LLM response")
+        print(response.content.strip()[:500])  # Print first 500 chars for debugging
+        
         try:
             return json.loads(response.content.strip())
         except json.JSONDecodeError:

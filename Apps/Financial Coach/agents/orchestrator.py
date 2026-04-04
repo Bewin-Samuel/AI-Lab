@@ -32,7 +32,13 @@ def run_financial_analysis(
     # ── Step 1: Document Reader ───────────────────────────────────────────────
     reader = DocumentReaderAgent(**llm_kwargs)
     raw_text = reader.extract_text(file_content, file_type)
+
+    # print("Raw extracted text (truncated):")
+    # print(raw_text[:500])  # Print first 500 chars for debugging
+    
     parsed = reader.parse_transactions(raw_text)
+    print("Orchestrator: After reader.parse_transactions")
+
     agent_outputs.append({
         "agent": "Document Reader Agent",
         "output": f"Extracted {parsed['transaction_count']} transactions. "

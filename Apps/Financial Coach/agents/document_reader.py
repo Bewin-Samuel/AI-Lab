@@ -75,8 +75,13 @@ class DocumentReaderAgent:
         response = self.llm.invoke(messages)
         raw = response.content.strip()
 
+        print("DocumentReaderAgent - LLM response")
+        print(raw)  # Print first 500 chars for debugging
+
         try:
             data = json.loads(raw)
+            print("DocumentReaderAgent - Json to Data")
+            print(data)
         except json.JSONDecodeError:
             # Fallback: return empty structure
             data = {

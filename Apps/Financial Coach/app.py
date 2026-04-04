@@ -7,7 +7,7 @@ import json
 from agents.orchestrator import run_financial_analysis
 
 st.set_page_config(
-    page_title="AI Financial Coach Powered by Outskill C5:Group 3",   
+    page_title="AI Financial Coach",   
     page_icon="💰",
     layout="wide"
 )
@@ -46,6 +46,14 @@ st.markdown("""
 
 # ── Vendor config — defined here, used everywhere below ───────────────────────
 VENDOR_OPTIONS = {
+    "HuggingFace":  {
+        "key": "huggingface",
+        "emoji": "🟡",
+        "placeholder": "hf_...",
+        "hint": "Get key: huggingface.co → Settings → Access Tokens (free)",
+        "default_model": "Qwen/Qwen2.5-72B-Instruct",
+        "model_hint": "e.g. mistralai/Mistral-7B-Instruct-v0.3, HuggingFaceH4/zephyr-7b-beta, Qwen/Qwen2.5-72B-Instruct"
+    },    
     "OpenAI":       {
         "key": "openai",
         "emoji": "🟢",
@@ -70,18 +78,12 @@ VENDOR_OPTIONS = {
         "default_model": "google/gemini-2.0-flash-lite-001",
         "model_hint": "e.g. openai/gpt-4o-mini, google/gemini-2.0-flash-lite-001, meta-llama/llama-3.1-8b-instruct:free"
     },
-    "HuggingFace":  {
-        "key": "huggingface",
-        "emoji": "🟡",
-        "placeholder": "hf_...",
-        "hint": "Get key: huggingface.co → Settings → Access Tokens (free)",
-        "default_model": "mistralai/Mistral-7B-Instruct-v0.3",
-        "model_hint": "e.g. mistralai/Mistral-7B-Instruct-v0.3, HuggingFaceH4/zephyr-7b-beta, Qwen/Qwen2.5-72B-Instruct"
-    },
 }
 
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("# 💰 AI Financial Coach")
+st.markdown("##  Powered by Outskill C5:Group 3")
+
 st.markdown("*Upload your bank statement or salary slip — our agents will analyze and advise.*")
 st.divider()
 

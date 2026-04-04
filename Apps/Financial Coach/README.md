@@ -86,3 +86,21 @@ Each agent has one clear job and passes structured output to the next.
 - GPT-4o-mini is used (cheaper, fast — ideal for hackathon)
 - API key is entered in UI, not stored anywhere
 - Works with PDF bank statements, CSV exports, or plain text files
+
+## To-do
+- Introduce Langchain
+- Introduce RAG
+
+## UIEnhancements
+- Valiation
+    - file type
+    - file size
+- Clear the Analysis area as a first thing before analysing
+
+## Once the Initial one is running
+- RAG
+    - 
+- MCP (1 0r more)
+    - Pull data from Zerodha
+    - Basically get ones portfolio & agument for the final analysis
+    - 

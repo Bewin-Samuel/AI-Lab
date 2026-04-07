@@ -31,12 +31,18 @@
             menuStrip1 = new MenuStrip();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             keyValidatorToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripSeparator();
+            exitToolStripMenuItem = new ToolStripMenuItem();
+            pythonToolStripMenuItem = new ToolStripMenuItem();
+            funToolStripMenuItem = new ToolStripMenuItem();
+            crushCalcToolStripMenuItem = new ToolStripMenuItem();
+            quizToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { toolsToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { toolsToolStripMenuItem, pythonToolStripMenuItem, funToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 24);
@@ -45,10 +51,10 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { keyValidatorToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { keyValidatorToolStripMenuItem, toolStripMenuItem1, exitToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(47, 20);
-            toolsToolStripMenuItem.Text = "Tools";
+            toolsToolStripMenuItem.Text = "&Tools";
             // 
             // keyValidatorToolStripMenuItem
             // 
@@ -57,6 +63,44 @@
             keyValidatorToolStripMenuItem.Size = new Size(183, 22);
             keyValidatorToolStripMenuItem.Text = "&Key Validator";
             keyValidatorToolStripMenuItem.Click += OnKeyValidatorClick;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(180, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new Size(183, 22);
+            exitToolStripMenuItem.Text = "E&xit";
+            exitToolStripMenuItem.Click += OnExitClick;
+            // 
+            // pythonToolStripMenuItem
+            // 
+            pythonToolStripMenuItem.Name = "pythonToolStripMenuItem";
+            pythonToolStripMenuItem.Size = new Size(57, 20);
+            pythonToolStripMenuItem.Text = "&Python";
+            // 
+            // funToolStripMenuItem
+            // 
+            funToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { crushCalcToolStripMenuItem, quizToolStripMenuItem });
+            funToolStripMenuItem.Name = "funToolStripMenuItem";
+            funToolStripMenuItem.Size = new Size(39, 20);
+            funToolStripMenuItem.Text = "&Fun";
+            // 
+            // crushCalcToolStripMenuItem
+            // 
+            crushCalcToolStripMenuItem.Name = "crushCalcToolStripMenuItem";
+            crushCalcToolStripMenuItem.Size = new Size(131, 22);
+            crushCalcToolStripMenuItem.Text = "&Crush Calc";
+            crushCalcToolStripMenuItem.Click += OnCrushCalcClick;
+            // 
+            // quizToolStripMenuItem
+            // 
+            quizToolStripMenuItem.Name = "quizToolStripMenuItem";
+            quizToolStripMenuItem.Size = new Size(131, 22);
+            quizToolStripMenuItem.Text = "&Quiz";
             // 
             // BewsAIStudio
             // 
@@ -81,5 +125,11 @@
         private MenuStrip menuStrip1;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem keyValidatorToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem pythonToolStripMenuItem;
+        private ToolStripMenuItem funToolStripMenuItem;
+        private ToolStripMenuItem crushCalcToolStripMenuItem;
+        private ToolStripMenuItem quizToolStripMenuItem;
     }
 }

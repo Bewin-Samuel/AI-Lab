@@ -1,3 +1,4 @@
+using Shell.Fun;
 using Shell.Tools;
 
 namespace Shell
@@ -11,13 +12,24 @@ namespace Shell
 
         private void OnKeyValidatorClick(object sender, EventArgs e)
         {
-            var keyValidator = new KevValidator
-            {
-                TopLevel = false,
-                MdiParent = this,
-            };
+            ShowMdiChild(new KeyValidator());
+        }
 
-            keyValidator.Show();
+        private void ShowMdiChild(Form form)
+        {
+            form.TopLevel = false;
+            form.MdiParent = this;
+            form.Show();
+        }
+
+        private void OnCrushCalcClick(object sender, EventArgs e)
+        {
+            ShowMdiChild(new CrushCalculator());
+        }
+
+        private void OnExitClick(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

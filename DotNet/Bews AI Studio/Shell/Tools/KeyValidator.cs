@@ -1,30 +1,32 @@
-﻿namespace Shell.Tools
+﻿using Shell.Common;
+
+namespace Shell.Tools
 {
-    public partial class KevValidator : Form
+    public partial class KeyValidator : BaseForm
     {
         private static readonly HttpClient HttpClient = new();
         private List<ModelDetailInfo> _allModels = new();
 
-        public KevValidator()
+        public KeyValidator()
         {
             InitializeComponent();
         }
 
         private void OnFormLoad(object sender, EventArgs e)
         {
-            FormInCenterOfMdi();
+            //FormInCenterOfMdi();
             LoadTypeDropdown();
         }
 
-        private void FormInCenterOfMdi()
-        {
-            if (this.MdiParent != null)
-            {
-                int x = (this.MdiParent.ClientSize.Width - this.Width) / 2;
-                int y = (this.MdiParent.ClientSize.Height - this.Height) / 2;
-                this.Location = new Point(x < 0 ? 0 : x, y < 0 ? 0 : y);
-            }
-        }
+        //private void FormInCenterOfMdi()
+        //{
+        //    if (this.MdiParent != null)
+        //    {
+        //        int x = (this.MdiParent.ClientSize.Width - this.Width) / 2;
+        //        int y = (this.MdiParent.ClientSize.Height - this.Height) / 2;
+        //        this.Location = new Point(x < 0 ? 0 : x, y < 0 ? 0 : y);
+        //    }
+        //}
 
         private void LoadTypeDropdown()
         {

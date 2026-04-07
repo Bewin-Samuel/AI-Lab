@@ -1,6 +1,6 @@
 ﻿namespace Shell.Tools
 {
-    partial class KevValidator
+    partial class KeyValidator
     {
         /// <summary>
         /// Required designer variable.

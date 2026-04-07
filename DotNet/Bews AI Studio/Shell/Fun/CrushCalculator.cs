@@ -18,7 +18,8 @@ namespace Shell.Fun
 
         private void OnCalculateClick(object sender, EventArgs e)
         {
-            lblFlameResult.Text = "Flames: " + new FlameCalculator().GetResult(txtCrush1.Text, txtCrush2.Text);
+            var result = new FlameCalculator().Calculate(txtCrush1.Text, txtCrush2.Text);
+            lblFlameResult.Text = FlameResultFormatter.Format(result);
         }
     }
 }

@@ -104,7 +104,7 @@
             groupBox2.Controls.Add(lblFlameResult);
             groupBox2.Location = new Point(12, 174);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(360, 100);
+            groupBox2.Size = new Size(360, 310);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Calculations...";
@@ -114,14 +114,14 @@
             lblFlameResult.Dock = DockStyle.Fill;
             lblFlameResult.Location = new Point(3, 19);
             lblFlameResult.Name = "lblFlameResult";
-            lblFlameResult.Size = new Size(354, 78);
+            lblFlameResult.Size = new Size(354, 288);
             lblFlameResult.TabIndex = 0;
             // 
             // CrushCalculator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(389, 450);
+            ClientSize = new Size(389, 500);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Name = "CrushCalculator";

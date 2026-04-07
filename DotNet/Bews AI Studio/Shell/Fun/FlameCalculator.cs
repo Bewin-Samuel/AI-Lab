@@ -1,85 +1,86 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace Shell.Fun
+namespace Shell.Fun;
+
+internal class FlameCalculator
 {
-    internal class FlameCalculator
+    private const string Flame = "FLAME";
+
+    public FlameCalculationResult Calculate(string crush1, string crush2)
     {
-        public string GetResult(string crush1, string crush2)
+        var normalizedCrush1 = Normalize(crush1);
+        var normalizedCrush2 = Normalize(crush2);
+
+        var (remainingCount, matchedCharacters) = StrikeCommonLetters(normalizedCrush1, normalizedCrush2);
+        var (eliminationSteps, finalResult) = EliminateFlameLetters(remainingCount);
+
+        return new FlameCalculationResult
         {
-            crush1 = Normalize(crush1);
-            crush2 = Normalize(crush2);
+            Crush1 = crush1,
+            Crush2 = crush2,
+            NormalizedCrush1 = normalizedCrush1,
+            NormalizedCrush2 = normalizedCrush2,
+            MatchedCharacters = matchedCharacters,
+            RemainingCharCount = remainingCount,
+            EliminationSteps = eliminationSteps,
+            FinalResult = finalResult
+        };
+    }
 
-            var netCount = GetNetLetterCountAfterRemovingTheCommonLetters(crush1, crush2);
+    private static string Normalize(string name) =>
+        Regex.Replace(name.ToUpper(), "[^A-Z]", "");
 
-            return GetResultantFlame(netCount);
-        }
+    private static (int RemainingCount, List<char> MatchedCharacters) StrikeCommonLetters(string crush1, string crush2)
+    {
+        char?[] arr1 = Array.ConvertAll(crush1.ToCharArray(), c => (char?)c);
+        char?[] arr2 = Array.ConvertAll(crush2.ToCharArray(), c => (char?)c);
+        List<char> matched = [];
 
-        static string Normalize(string name)
+        for (int i = 0; i < arr1.Length; i++)
         {
-            // Uppercase and remove non-alphabetic characters
-            return Regex.Replace(name.ToUpper(), "[^A-Z]", "");
-        }
-
-        static int GetNetLetterCountAfterRemovingTheCommonLetters(string cursh1, string crush2)
-        {
-            char?[] arr1 = Array.ConvertAll(cursh1.ToCharArray(), c => (char?)c);
-            char?[] arr2 = Array.ConvertAll(crush2.ToCharArray(), c => (char?)c);
-
-            for (int i = 0; i < arr1.Length; i++)
+            for (int j = 0; j < arr2.Length; j++)
             {
-                for (int j = 0; j < arr2.Length; j++)
+                if (arr1[i] is not null && arr2[j] is not null && arr1[i] == arr2[j])
                 {
-                    if (arr1[i] != null && arr2[j] != null && arr1[i] == arr2[j])
-                    {
-                        arr1[i] = null;  // cancel
-                        arr2[j] = null;  // cancel
-                        break;
-                    }
+                    matched.Add(arr1[i]!.Value);
+                    arr1[i] = null;
+                    arr2[j] = null;
+                    break;
                 }
             }
-
-            // Count remaining (non-null) letters
-            int count = 0;
-            foreach (var c in arr1) if (c != null) count++;
-            foreach (var c in arr2) if (c != null) count++;
-            return count;
         }
 
-        static string GetResultantFlame(int count)
-        {
-            List<char> letters = new List<char> { 'F', 'L', 'A', 'M', 'E' };
-            int pos = 0;
-
-            while (letters.Count > 1)
-            {
-                // Calculate the index to eliminate
-                int idx = (pos + count - 1) % letters.Count;
-
-                Console.WriteLine($"Count {count} → Eliminate '{letters[idx]}'");
-
-                letters.RemoveAt(idx);
-
-                // Next round starts from same index (mod new length)
-                pos = idx % letters.Count;
-            }
-
-            return GetResult(letters[0]);
-        }
-
-        static string GetResult(char letter)
-        {
-            return letter switch
-            {
-                'F' => "Friendship 🤝",
-                'L' => "Love ❤️",
-                'A' => "Affection 🥰",
-                'M' => "Marriage 💍",
-                'E' => "Enemies ⚔️",
-                _ => "Unknown"
-            };
-        }
+        int remaining = arr1.Count(c => c is not null) + arr2.Count(c => c is not null);
+        return (remaining, matched);
     }
+
+    private static (List<EliminationStep> Steps, string FinalResult) EliminateFlameLetters(int count)
+    {
+        List<char> letters = [.. Flame];
+        List<EliminationStep> steps = [];
+        int pos = 0;
+        int iteration = 1;
+
+        while (letters.Count > 1)
+        {
+            int idx = (pos + count - 1) % letters.Count;
+            char eliminated = letters[idx];
+            letters.RemoveAt(idx);
+            pos = idx % letters.Count;
+
+            steps.Add(new EliminationStep(iteration++, eliminated, string.Join(", ", letters)));
+        }
+
+        return (steps, ResolveMeaning(letters[0]));
+    }
+
+    private static string ResolveMeaning(char letter) => letter switch
+    {
+        'F' => "Friendship 🤝",
+        'L' => "Love ❤️",
+        'A' => "Affection 🥰",
+        'M' => "Marriage 💍",
+        'E' => "Enemies ⚔️",
+        _ => "Unknown"
+    };
 }

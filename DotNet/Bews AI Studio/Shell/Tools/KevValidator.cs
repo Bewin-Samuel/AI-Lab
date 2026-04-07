@@ -41,8 +41,17 @@
             cmbKeyType.SelectedIndex = 0;
         }
 
+        private void ClearKeyDetails()
+        {
+            lblKeyDetails.Text = string.Empty;
+            dgvModels.Rows.Clear();
+            _allModels.Clear();
+        }
+
         private async void OnKeyValidateClick(object? sender, EventArgs e)
         {
+            ClearKeyDetails();
+
             var key = txtKey.Text;
 
             if (string.IsNullOrWhiteSpace(key))
@@ -144,6 +153,7 @@
 
         private async void OnKeyDetailsClick(object sender, EventArgs e)
         {
+            ClearKeyDetails();
             var key = txtKey.Text;
 
             if (string.IsNullOrWhiteSpace(key))

@@ -106,49 +106,84 @@
 
         private static async Task<bool> ValidateOpenAiKeyAsync(string key)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
 
-            using var response = await HttpClient.SendAsync(request);
-            return response.IsSuccessStatusCode;
+                using var response = await HttpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
         }
 
         private static async Task<bool> ValidateOpenRouterKeyAsync(string key)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/auth/key");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/auth/key");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
 
-            using var response = await HttpClient.SendAsync(request);
-            return response.IsSuccessStatusCode;
+                using var response = await HttpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
         }
 
         private static async Task<bool> ValidateGeminiKeyAsync(string key)
         {
-            var requestUri = $"https://generativelanguage.googleapis.com/v1beta/models?key={Uri.EscapeDataString(key)}";
-            using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            try
+            {
+                var requestUri = $"https://generativelanguage.googleapis.com/v1beta/models?key={Uri.EscapeDataString(key)}";
+                using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
-            using var response = await HttpClient.SendAsync(request);
-            return response.IsSuccessStatusCode;
+                using var response = await HttpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
         }
 
         private static async Task<bool> ValidateHuggingFaceKeyAsync(string key)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://huggingface.co/api/whoami-v2");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Get, "https://huggingface.co/api/whoami-v2");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
 
-            using var response = await HttpClient.SendAsync(request);
-            return response.IsSuccessStatusCode;
+                using var response = await HttpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
         }
 
         private static async Task<bool> ValidateGitHubKeyAsync(string key)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
-            request.Headers.UserAgent.ParseAdd("BewsAIStudio/1.0");
-            request.Headers.Accept.ParseAdd("application/vnd.github+json");
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+                request.Headers.UserAgent.ParseAdd("BewsAIStudio/1.0");
+                request.Headers.Accept.ParseAdd("application/vnd.github+json");
 
-            using var response = await HttpClient.SendAsync(request);
-            return response.IsSuccessStatusCode;
+                using var response = await HttpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
         }
 
         private async void OnKeyDetailsClick(object sender, EventArgs e)

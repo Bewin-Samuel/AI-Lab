@@ -15,5 +15,10 @@ namespace Shell.Fun
         {
             InitializeComponent();
         }
+
+        private void OnCalculateClick(object sender, EventArgs e)
+        {
+            lblFlameResult.Text = "Flames: " + new FlameCalculator().GetResult(txtCrush1.Text, txtCrush2.Text);
+        }
     }
 }

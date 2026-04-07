@@ -17,6 +17,8 @@ namespace Shell.Common
 
         private void OnFormLoad(object sender, EventArgs e)
         {
+            this.TopLevel = false;
+            this.ShowInTaskbar = false;
             ShowFormInTheCenterOfMdi();
         }
 

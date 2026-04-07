@@ -17,7 +17,6 @@ namespace Shell
 
         private void ShowMdiChild(Form form)
         {
-            form.TopLevel = false;
             form.MdiParent = this;
             form.Show();
         }

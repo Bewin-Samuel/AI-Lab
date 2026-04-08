@@ -6,3 +6,6 @@
 
 # More details in Grid
 * HF & OpenRouter gives models from multiple vendors, so can a vendor column be added?
+
+## Secret Store:
+* The right approach for a .NET app is User Secrets — secrets are stored in your user profile (%APPDATA%\Microsoft\UserSecrets\) and never in the project directory, so they can never be accidentally committed.

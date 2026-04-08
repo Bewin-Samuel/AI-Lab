@@ -1,2 +1,16 @@
 Frameworks/LangChain/AgenticRag Using Claude/.env
 *.pyc
+
+# .NET build outputs
+bin/
+obj/
+
+# User Secrets (stored outside project dir, but guard local overrides)
+secrets.json
+appsettings.local.json
+
+# VS / Rider
+.vs/
+*.user
+*.suo
+

@@ -1,4 +1,5 @@
-﻿using Shell.Common;
+﻿using Microsoft.Extensions.Configuration;
+using Shell.Common;
 
 namespace Shell.Fun
 {
@@ -39,11 +40,15 @@ namespace Shell.Fun
 
         private static ModelData GetModelData()
         {
+            var config = new ConfigurationBuilder()
+                .AddUserSecrets<CrushCalculator>()
+                .Build();
+
             return new ModelData
             {
-                ApiKey = "8fVyELafcYZ38uEymeFqbAoIReaWnLciDnozcTmbRUy3cUFsXwzIJQQJ99CDACYeBjFXJ3w3AAABACOGdYJn",
-                BaseUri = new Uri("https://bews-instance.openai.azure.com/"),
-                DeploymentName = "gpt-4o"
+                ApiKey = config["AzureOpenAI:ApiKey"]!,
+                BaseUri = new Uri(config["AzureOpenAI:BaseUri"]!),
+                DeploymentName = config["AzureOpenAI:DeploymentName"]!
             };
         }
     }

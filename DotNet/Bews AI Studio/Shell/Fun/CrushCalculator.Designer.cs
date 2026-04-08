@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            btnAskAI = new Button();
             btnCalculate = new Button();
             txtCrush2 = new TextBox();
             lblCrush2 = new Label();
@@ -36,7 +37,6 @@
             label1 = new Label();
             groupBox2 = new GroupBox();
             lblFlameResult = new RichTextBox();
-            btnAskAI = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -55,6 +55,17 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Name";
+            // 
+            // btnAskAI
+            // 
+            btnAskAI.BackColor = SystemColors.ScrollBar;
+            btnAskAI.Location = new Point(189, 96);
+            btnAskAI.Name = "btnAskAI";
+            btnAskAI.Size = new Size(75, 43);
+            btnAskAI.TabIndex = 5;
+            btnAskAI.Text = "&Ask AI";
+            btnAskAI.UseVisualStyleBackColor = false;
+            btnAskAI.Click += OnAskAI;
             // 
             // btnCalculate
             // 
@@ -123,17 +134,7 @@
             lblFlameResult.Size = new Size(354, 288);
             lblFlameResult.TabIndex = 0;
             lblFlameResult.TabStop = false;
-            // 
-            // btnAskAI
-            // 
-            btnAskAI.BackColor = SystemColors.ScrollBar;
-            btnAskAI.Location = new Point(189, 96);
-            btnAskAI.Name = "btnAskAI";
-            btnAskAI.Size = new Size(75, 43);
-            btnAskAI.TabIndex = 5;
-            btnAskAI.Text = "&Ask AI";
-            btnAskAI.UseVisualStyleBackColor = false;
-            btnAskAI.Click += OnAskAI;
+            lblFlameResult.Text = "";
             // 
             // CrushCalculator
             // 
@@ -142,6 +143,7 @@
             ClientSize = new Size(389, 500);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            MaximizeBox = false;
             Name = "CrushCalculator";
             ShowInTaskbar = false;
             Text = "♥ Crush Calculator ♥";

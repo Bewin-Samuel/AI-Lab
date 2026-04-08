@@ -22,6 +22,7 @@ namespace Shell.Fun
         {
             try
             {
+                this.Cursor = Cursors.WaitCursor;
                 if (flameResult == null)
                 {
                     MessageBox.Show("Please calculate the flame result first.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -35,6 +36,10 @@ namespace Shell.Fun
             catch (Exception exception)
             {
                 MessageBox.Show($"An error occurred while generating the haiku. {Environment.NewLine}{exception.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
             }
         }
 

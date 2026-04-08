@@ -14,19 +14,8 @@ namespace Shell.Tools
 
         private void OnFormLoad(object sender, EventArgs e)
         {
-            //FormInCenterOfMdi();
             LoadTypeDropdown();
         }
-
-        //private void FormInCenterOfMdi()
-        //{
-        //    if (this.MdiParent != null)
-        //    {
-        //        int x = (this.MdiParent.ClientSize.Width - this.Width) / 2;
-        //        int y = (this.MdiParent.ClientSize.Height - this.Height) / 2;
-        //        this.Location = new Point(x < 0 ? 0 : x, y < 0 ? 0 : y);
-        //    }
-        //}
 
         private void LoadTypeDropdown()
         {
@@ -112,7 +101,6 @@ namespace Shell.Tools
             {
                 using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
-
                 using var response = await HttpClient.SendAsync(request);
                 return response.IsSuccessStatusCode;
             }

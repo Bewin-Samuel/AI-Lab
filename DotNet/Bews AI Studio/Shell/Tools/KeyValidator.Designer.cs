@@ -32,6 +32,8 @@
             btnModelDetails = new Button();
             btnKeyDetails = new Button();
             btnValidate = new Button();
+            txtBaseUrl = new TextBox();
+            label3 = new Label();
             txtKey = new TextBox();
             label2 = new Label();
             cmbKeyType = new ComboBox();
@@ -53,6 +55,8 @@
             groupBox1.Controls.Add(btnModelDetails);
             groupBox1.Controls.Add(btnKeyDetails);
             groupBox1.Controls.Add(btnValidate);
+            groupBox1.Controls.Add(txtBaseUrl);
+            groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(txtKey);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(cmbKeyType);
@@ -67,9 +71,9 @@
             // btnModelDetails
             // 
             btnModelDetails.BackColor = SystemColors.ScrollBar;
-            btnModelDetails.Location = new Point(320, 104);
+            btnModelDetails.Location = new Point(320, 107);
             btnModelDetails.Name = "btnModelDetails";
-            btnModelDetails.Size = new Size(75, 43);
+            btnModelDetails.Size = new Size(75, 40);
             btnModelDetails.TabIndex = 4;
             btnModelDetails.Text = "Model &Details";
             btnModelDetails.UseVisualStyleBackColor = false;
@@ -78,9 +82,9 @@
             // btnKeyDetails
             // 
             btnKeyDetails.BackColor = SystemColors.ScrollBar;
-            btnKeyDetails.Location = new Point(217, 104);
+            btnKeyDetails.Location = new Point(217, 107);
             btnKeyDetails.Name = "btnKeyDetails";
-            btnKeyDetails.Size = new Size(75, 43);
+            btnKeyDetails.Size = new Size(75, 40);
             btnKeyDetails.TabIndex = 4;
             btnKeyDetails.Text = "Key &Details";
             btnKeyDetails.UseVisualStyleBackColor = false;
@@ -89,26 +93,42 @@
             // btnValidate
             // 
             btnValidate.BackColor = SystemColors.ScrollBar;
-            btnValidate.Location = new Point(114, 104);
+            btnValidate.Location = new Point(114, 107);
             btnValidate.Name = "btnValidate";
-            btnValidate.Size = new Size(75, 43);
+            btnValidate.Size = new Size(75, 40);
             btnValidate.TabIndex = 4;
             btnValidate.Text = "&Validate";
             btnValidate.UseVisualStyleBackColor = false;
             btnValidate.Click += OnKeyValidateClick;
             // 
+            // txtBaseUrl
+            // 
+            txtBaseUrl.Location = new Point(129, 75);
+            txtBaseUrl.Name = "txtBaseUrl";
+            txtBaseUrl.Size = new Size(358, 23);
+            txtBaseUrl.TabIndex = 3;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(16, 79);
+            label3.Name = "label3";
+            label3.Size = new Size(49, 15);
+            label3.TabIndex = 2;
+            label3.Text = "Base Url";
+            // 
             // txtKey
             // 
-            txtKey.Location = new Point(129, 68);
+            txtKey.Location = new Point(129, 43);
             txtKey.Name = "txtKey";
             txtKey.PasswordChar = '•';
-            txtKey.Size = new Size(304, 23);
+            txtKey.Size = new Size(358, 23);
             txtKey.TabIndex = 3;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(16, 72);
+            label2.Location = new Point(16, 47);
             label2.Name = "label2";
             label2.Size = new Size(26, 15);
             label2.TabIndex = 2;
@@ -118,15 +138,15 @@
             // 
             cmbKeyType.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbKeyType.FormattingEnabled = true;
-            cmbKeyType.Location = new Point(129, 32);
+            cmbKeyType.Location = new Point(129, 14);
             cmbKeyType.Name = "cmbKeyType";
-            cmbKeyType.Size = new Size(304, 23);
+            cmbKeyType.Size = new Size(358, 23);
             cmbKeyType.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(16, 36);
+            label1.Location = new Point(16, 19);
             label1.Name = "label1";
             label1.Size = new Size(32, 15);
             label1.TabIndex = 0;
@@ -187,7 +207,7 @@
             dgvModels.Size = new Size(496, 341);
             dgvModels.TabIndex = 0;
             // 
-            // KevValidator
+            // KeyValidator
             // 
             AcceptButton = btnValidate;
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -197,7 +217,7 @@
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             MaximizeBox = false;
-            Name = "KevValidator";
+            Name = "KeyValidator";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Key Validator";
@@ -206,6 +226,7 @@
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvModels).EndInit();
             ResumeLayout(false);
         }
@@ -226,5 +247,7 @@
         private Button btnModelDetails;
         private TextBox txtModelSearch;
         private Label lblModelSearch;
+        private TextBox txtBaseUrl;
+        private Label label3;
     }
 }

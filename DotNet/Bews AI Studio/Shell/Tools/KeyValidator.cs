@@ -1,4 +1,8 @@
 ﻿using Shell.Common;
+using System.Buffers.Text;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Security.Policy;
 
 namespace Shell.Tools
 {
@@ -21,6 +25,7 @@ namespace Shell.Tools
         {
             cmbKeyType.Items.Clear();
 
+            cmbKeyType.Items.Add("Azure Open AI");
             cmbKeyType.Items.Add("Open Router");
             cmbKeyType.Items.Add("Open AI");
             cmbKeyType.Items.Add("Hugging Face");
@@ -41,6 +46,8 @@ namespace Shell.Tools
 
         private async void OnKeyValidateClick(object? sender, EventArgs e)
         {
+            AzureOpenAIMediator.TestChatCompletion();
+            return; 
             ClearKeyDetails();
 
             var key = txtKey.Text;
@@ -60,7 +67,7 @@ namespace Shell.Tools
 
             try
             {
-                isValid = await ValidateKeyAsync(keyType, key);
+                isValid = await ValidateKeyAsync(keyType, key, txtBaseUrl.Text.Trim());
             }
             finally
             {
@@ -75,7 +82,7 @@ namespace Shell.Tools
                 isValid ? MessageBoxIcon.Information : MessageBoxIcon.Error);
         }
 
-        private static async Task<bool> ValidateKeyAsync(string keyType, string key)
+        private static async Task<bool> ValidateKeyAsync(string keyType, string key, string baseUrl = "")
         {
             var normalizedKey = key.Trim();
 
@@ -86,6 +93,7 @@ namespace Shell.Tools
 
             return keyType switch
             {
+                "Azure Open AI" => await ValidateAzureOpenAIKeyAsync(normalizedKey, baseUrl),
                 "Open Router" => await ValidateOpenRouterKeyAsync(normalizedKey),
                 "Open AI" => await ValidateOpenAiKeyAsync(normalizedKey),
                 "Hugging Face" => await ValidateHuggingFaceKeyAsync(normalizedKey),
@@ -100,9 +108,21 @@ namespace Shell.Tools
             try
             {
                 using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
                 using var response = await HttpClient.SendAsync(request);
                 return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
+        }
+
+        private static async Task<bool> ValidateAzureOpenAIKeyAsync(string key, string baseUrl)
+        {
+            try
+            {
+                return await AzureOpenAIMediator.ValidateAzureOpenAIKeyAsync(key, baseUrl);
             }
             catch (HttpRequestException)
             {
@@ -115,7 +135,7 @@ namespace Shell.Tools
             try
             {
                 using var request = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/auth/key");
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
 
                 using var response = await HttpClient.SendAsync(request);
                 return response.IsSuccessStatusCode;
@@ -147,7 +167,7 @@ namespace Shell.Tools
             try
             {
                 using var request = new HttpRequestMessage(HttpMethod.Get, "https://huggingface.co/api/whoami-v2");
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
 
                 using var response = await HttpClient.SendAsync(request);
                 return response.IsSuccessStatusCode;
@@ -163,7 +183,7 @@ namespace Shell.Tools
             try
             {
                 using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
                 request.Headers.UserAgent.ParseAdd("BewsAIStudio/1.0");
                 request.Headers.Accept.ParseAdd("application/vnd.github+json");
 
@@ -229,7 +249,7 @@ namespace Shell.Tools
             var details = new KeyDetailsInfo();
 
             using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
 
             using var response = await HttpClient.SendAsync(request);
             details.Active = response.IsSuccessStatusCode;
@@ -257,7 +277,7 @@ namespace Shell.Tools
 
             using (var request = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/auth/key"))
             {
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
                 using var response = await HttpClient.SendAsync(request);
                 details.Active = response.IsSuccessStatusCode;
 
@@ -282,7 +302,7 @@ namespace Shell.Tools
 
             using (var modelRequest = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/models"))
             {
-                modelRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+                modelRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
                 using var modelResponse = await HttpClient.SendAsync(modelRequest);
 
                 if (modelResponse.IsSuccessStatusCode)
@@ -353,7 +373,7 @@ namespace Shell.Tools
             var details = new KeyDetailsInfo();
 
             using var request = new HttpRequestMessage(HttpMethod.Get, "https://huggingface.co/api/whoami-v2");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
 
             using var response = await HttpClient.SendAsync(request);
             details.Active = response.IsSuccessStatusCode;
@@ -365,7 +385,7 @@ namespace Shell.Tools
             var details = new KeyDetailsInfo();
 
             using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
             request.Headers.UserAgent.ParseAdd("BewsAIStudio/1.0");
             request.Headers.Accept.ParseAdd("application/vnd.github+json");
 
@@ -566,7 +586,7 @@ namespace Shell.Tools
         private static async Task<List<ModelDetailInfo>> GetOpenAiModelsAsync(string key)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
 
             using var response = await HttpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
@@ -604,7 +624,7 @@ namespace Shell.Tools
         private static async Task<List<ModelDetailInfo>> GetOpenRouterModelsAsync(string key)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/models");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
 
             using var response = await HttpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
@@ -688,7 +708,7 @@ namespace Shell.Tools
         private static async Task<List<ModelDetailInfo>> GetHuggingFaceModelsAsync(string key)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, "https://huggingface.co/api/models?limit=100");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
 
             using var response = await HttpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
@@ -724,7 +744,7 @@ namespace Shell.Tools
         private static async Task<List<ModelDetailInfo>> GetGitHubModelsAsync(string key)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, "https://models.inference.ai.azure.com/models");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
             request.Headers.UserAgent.ParseAdd("BewsAIStudio/1.0");
 
             using var response = await HttpClient.SendAsync(request);

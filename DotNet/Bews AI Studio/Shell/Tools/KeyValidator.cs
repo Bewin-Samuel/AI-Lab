@@ -1,8 +1,5 @@
 ﻿using Shell.Common;
-using System.Buffers.Text;
-using System.Net;
 using System.Net.Http.Headers;
-using System.Security.Policy;
 
 namespace Shell.Tools
 {
@@ -46,8 +43,6 @@ namespace Shell.Tools
 
         private async void OnKeyValidateClick(object? sender, EventArgs e)
         {
-            AzureOpenAIMediator.TestChatCompletion();
-            return; 
             ClearKeyDetails();
 
             var key = txtKey.Text;

@@ -60,19 +60,20 @@
             // 
             keyValidatorToolStripMenuItem.Name = "keyValidatorToolStripMenuItem";
             keyValidatorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.K;
-            keyValidatorToolStripMenuItem.Size = new Size(183, 22);
+            keyValidatorToolStripMenuItem.ShowShortcutKeys = false;
+            keyValidatorToolStripMenuItem.Size = new Size(180, 22);
             keyValidatorToolStripMenuItem.Text = "&Key Validator";
             keyValidatorToolStripMenuItem.Click += OnKeyValidatorClick;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(180, 6);
+            toolStripMenuItem1.Size = new Size(177, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(183, 22);
+            exitToolStripMenuItem.Size = new Size(180, 22);
             exitToolStripMenuItem.Text = "E&xit";
             exitToolStripMenuItem.Click += OnExitClick;
             // 
@@ -92,14 +93,16 @@
             // crushCalcToolStripMenuItem
             // 
             crushCalcToolStripMenuItem.Name = "crushCalcToolStripMenuItem";
-            crushCalcToolStripMenuItem.Size = new Size(131, 22);
+            crushCalcToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
+            crushCalcToolStripMenuItem.ShowShortcutKeys = false;
+            crushCalcToolStripMenuItem.Size = new Size(180, 22);
             crushCalcToolStripMenuItem.Text = "&Crush Calc";
             crushCalcToolStripMenuItem.Click += OnCrushCalcClick;
             // 
             // quizToolStripMenuItem
             // 
             quizToolStripMenuItem.Name = "quizToolStripMenuItem";
-            quizToolStripMenuItem.Size = new Size(131, 22);
+            quizToolStripMenuItem.Size = new Size(180, 22);
             quizToolStripMenuItem.Text = "&Quiz";
             // 
             // BewsAIStudio

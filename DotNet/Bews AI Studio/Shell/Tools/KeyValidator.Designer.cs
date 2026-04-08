@@ -74,7 +74,7 @@
             btnModelDetails.Location = new Point(320, 107);
             btnModelDetails.Name = "btnModelDetails";
             btnModelDetails.Size = new Size(75, 40);
-            btnModelDetails.TabIndex = 4;
+            btnModelDetails.TabIndex = 5;
             btnModelDetails.Text = "Model &Details";
             btnModelDetails.UseVisualStyleBackColor = false;
             btnModelDetails.Click += OnModelDetailsClick;
@@ -96,7 +96,7 @@
             btnValidate.Location = new Point(114, 107);
             btnValidate.Name = "btnValidate";
             btnValidate.Size = new Size(75, 40);
-            btnValidate.TabIndex = 4;
+            btnValidate.TabIndex = 3;
             btnValidate.Text = "&Validate";
             btnValidate.UseVisualStyleBackColor = false;
             btnValidate.Click += OnKeyValidateClick;
@@ -106,7 +106,7 @@
             txtBaseUrl.Location = new Point(129, 75);
             txtBaseUrl.Name = "txtBaseUrl";
             txtBaseUrl.Size = new Size(358, 23);
-            txtBaseUrl.TabIndex = 3;
+            txtBaseUrl.TabIndex = 2;
             // 
             // label3
             // 
@@ -123,16 +123,16 @@
             txtKey.Name = "txtKey";
             txtKey.PasswordChar = '•';
             txtKey.Size = new Size(358, 23);
-            txtKey.TabIndex = 3;
+            txtKey.TabIndex = 1;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Location = new Point(16, 47);
             label2.Name = "label2";
-            label2.Size = new Size(26, 15);
+            label2.Size = new Size(47, 15);
             label2.TabIndex = 2;
-            label2.Text = "Key";
+            label2.Text = "Api Key";
             // 
             // cmbKeyType
             // 
@@ -141,7 +141,7 @@
             cmbKeyType.Location = new Point(129, 14);
             cmbKeyType.Name = "cmbKeyType";
             cmbKeyType.Size = new Size(358, 23);
-            cmbKeyType.TabIndex = 1;
+            cmbKeyType.TabIndex = 0;
             // 
             // label1
             // 
@@ -187,7 +187,7 @@
             txtModelSearch.Location = new Point(85, 23);
             txtModelSearch.Name = "txtModelSearch";
             txtModelSearch.Size = new Size(417, 23);
-            txtModelSearch.TabIndex = 2;
+            txtModelSearch.TabIndex = 1;
             txtModelSearch.TextChanged += OnModelSearchTextChanged;
             // 
             // lblModelSearch

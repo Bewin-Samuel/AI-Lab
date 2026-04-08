@@ -35,13 +35,15 @@
             txtCrush1 = new TextBox();
             label1 = new Label();
             groupBox2 = new GroupBox();
-            lblFlameResult = new Label();
+            lblFlameResult = new RichTextBox();
+            btnAskAI = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnAskAI);
             groupBox1.Controls.Add(btnCalculate);
             groupBox1.Controls.Add(txtCrush2);
             groupBox1.Controls.Add(lblCrush2);
@@ -57,7 +59,7 @@
             // btnCalculate
             // 
             btnCalculate.BackColor = SystemColors.ScrollBar;
-            btnCalculate.Location = new Point(143, 98);
+            btnCalculate.Location = new Point(97, 96);
             btnCalculate.Name = "btnCalculate";
             btnCalculate.Size = new Size(75, 43);
             btnCalculate.TabIndex = 5;
@@ -111,11 +113,27 @@
             // 
             // lblFlameResult
             // 
+            lblFlameResult.BackColor = SystemColors.Control;
+            lblFlameResult.BorderStyle = BorderStyle.None;
             lblFlameResult.Dock = DockStyle.Fill;
             lblFlameResult.Location = new Point(3, 19);
             lblFlameResult.Name = "lblFlameResult";
+            lblFlameResult.ReadOnly = true;
+            lblFlameResult.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
             lblFlameResult.Size = new Size(354, 288);
             lblFlameResult.TabIndex = 0;
+            lblFlameResult.TabStop = false;
+            // 
+            // btnAskAI
+            // 
+            btnAskAI.BackColor = SystemColors.ScrollBar;
+            btnAskAI.Location = new Point(189, 96);
+            btnAskAI.Name = "btnAskAI";
+            btnAskAI.Size = new Size(75, 43);
+            btnAskAI.TabIndex = 5;
+            btnAskAI.Text = "&Ask AI";
+            btnAskAI.UseVisualStyleBackColor = false;
+            btnAskAI.Click += OnAskAI;
             // 
             // CrushCalculator
             // 
@@ -142,6 +160,7 @@
         private Label lblCrush2;
         private GroupBox groupBox2;
         private Button btnCalculate;
-        private Label lblFlameResult;
+        private RichTextBox lblFlameResult;
+        private Button btnAskAI;
     }
 }

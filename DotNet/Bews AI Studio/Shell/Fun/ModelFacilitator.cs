@@ -6,12 +6,17 @@ namespace Shell.Fun
 {
     internal class ModelFacilitator(ModelData data)
     {
-        public AzureOpenAIClient AzureOpenAIClient => new AzureOpenAIClient(data.BaseUri, new AzureKeyCredential(data.ApiKey));
-
-        public async Task<string> GetHaikuAsync(string crush1, string crush2, string relationship)
+        private ChatClient ChatClient 
         {
-            ChatClient chatClient = AzureOpenAIClient.GetChatClient(data.DeploymentName);
+            get
+            {
+                AzureOpenAIClient AzureOpenAIClient = new(data.BaseUri, new AzureKeyCredential(data.ApiKey));
+                return AzureOpenAIClient.GetChatClient(data.DeploymentName);
+            }
+        }
 
+        public Task<string> GetHaikuAsync(string crush1, string crush2, string relationship)
+        {
             var requestOptions = new ChatCompletionOptions()
             {
                 MaxOutputTokenCount = 4096,
@@ -26,15 +31,11 @@ namespace Shell.Fun
                 new UserChatMessage($"{crush1} and {crush2} shares {relationship}. Get me a beautiful Haiku based on that."),
             ];
 
-            var response = await chatClient.CompleteChatAsync(messages, requestOptions);
-
-            return response.Value.Content[0].Text;
+            return CompleteChatAsync(messages, requestOptions);
         }
 
-        public async Task<string> GetShortStory(string crush1, string crush2, string relationship)
+        public Task<string> GetShortStory(string crush1, string crush2, string relationship)
         {
-            ChatClient chatClient = AzureOpenAIClient.GetChatClient(data.DeploymentName);
-
             var requestOptions = new ChatCompletionOptions()
             {
                 MaxOutputTokenCount = 4096,
@@ -50,8 +51,12 @@ namespace Shell.Fun
                 new UserChatMessage($"{crush1} and {crush2} shares {relationship}. Get me a beautiful short story based on that."),
             ];
 
-            var response = await chatClient.CompleteChatAsync(messages, requestOptions);
+            return CompleteChatAsync(messages, requestOptions);
+        }
 
+        private async Task<string> CompleteChatAsync(List<ChatMessage> messages, ChatCompletionOptions options)
+        {
+            var response = await ChatClient.CompleteChatAsync(messages, options);
             return response.Value.Content[0].Text;
         }
     }

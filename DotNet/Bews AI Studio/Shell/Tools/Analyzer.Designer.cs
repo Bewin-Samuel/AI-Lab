@@ -55,7 +55,7 @@
             groupBox1.Controls.Add(btnAnalyze);
             groupBox1.Controls.Add(rtbContent);
             groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(19, 172);
+            groupBox1.Location = new Point(19, 197);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(769, 347);
             groupBox1.TabIndex = 0;
@@ -93,7 +93,7 @@
             // 
             groupBox2.Controls.Add(rtbResult);
             groupBox2.Controls.Add(lblResult);
-            groupBox2.Location = new Point(19, 525);
+            groupBox2.Location = new Point(19, 550);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(762, 275);
             groupBox2.TabIndex = 5;
@@ -112,9 +112,9 @@
             lblResult.AutoSize = true;
             lblResult.Location = new Point(9, 20);
             lblResult.Name = "lblResult";
-            lblResult.Size = new Size(118, 15);
+            lblResult.Size = new Size(128, 15);
             lblResult.TabIndex = 0;
-            lblResult.Text = "Summary & Sentiment";
+            lblResult.Text = "Summary && Sentiment";
             // 
             // groupBox3
             // 
@@ -129,7 +129,7 @@
             groupBox3.Controls.Add(label4);
             groupBox3.Location = new Point(19, 7);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(624, 159);
+            groupBox3.Size = new Size(624, 184);
             groupBox3.TabIndex = 6;
             groupBox3.TabStop = false;
             groupBox3.Text = "Key Details";
@@ -137,9 +137,9 @@
             // btnLoad
             // 
             btnLoad.BackColor = SystemColors.ScrollBar;
-            btnLoad.Location = new Point(512, 18);
+            btnLoad.Location = new Point(512, 24);
             btnLoad.Name = "btnLoad";
-            btnLoad.Size = new Size(85, 133);
+            btnLoad.Size = new Size(85, 137);
             btnLoad.TabIndex = 5;
             btnLoad.Text = "&Load Models";
             btnLoad.UseVisualStyleBackColor = false;
@@ -147,7 +147,7 @@
             // 
             // txtBaseUrl
             // 
-            txtBaseUrl.Location = new Point(129, 90);
+            txtBaseUrl.Location = new Point(129, 100);
             txtBaseUrl.Name = "txtBaseUrl";
             txtBaseUrl.Size = new Size(358, 23);
             txtBaseUrl.TabIndex = 2;
@@ -155,7 +155,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(16, 94);
+            label3.Location = new Point(16, 104);
             label3.Name = "label3";
             label3.Size = new Size(49, 15);
             label3.TabIndex = 2;
@@ -163,7 +163,7 @@
             // 
             // txtApiKey
             // 
-            txtApiKey.Location = new Point(129, 52);
+            txtApiKey.Location = new Point(129, 62);
             txtApiKey.Name = "txtApiKey";
             txtApiKey.PasswordChar = '•';
             txtApiKey.Size = new Size(358, 23);
@@ -172,7 +172,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(16, 56);
+            label2.Location = new Point(16, 66);
             label2.Name = "label2";
             label2.Size = new Size(47, 15);
             label2.TabIndex = 2;
@@ -182,7 +182,7 @@
             // 
             cmbModels.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbModels.FormattingEnabled = true;
-            cmbModels.Location = new Point(129, 128);
+            cmbModels.Location = new Point(129, 138);
             cmbModels.Name = "cmbModels";
             cmbModels.Size = new Size(358, 23);
             cmbModels.TabIndex = 0;
@@ -190,7 +190,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(16, 132);
+            label5.Location = new Point(16, 142);
             label5.Name = "label5";
             label5.Size = new Size(46, 15);
             label5.TabIndex = 0;
@@ -200,7 +200,7 @@
             // 
             txtProviders.DropDownStyle = ComboBoxStyle.DropDownList;
             txtProviders.FormattingEnabled = true;
-            txtProviders.Location = new Point(129, 14);
+            txtProviders.Location = new Point(129, 24);
             txtProviders.Name = "txtProviders";
             txtProviders.Size = new Size(358, 23);
             txtProviders.TabIndex = 0;
@@ -209,7 +209,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(16, 18);
+            label4.Location = new Point(16, 28);
             label4.Name = "label4";
             label4.Size = new Size(56, 15);
             label4.TabIndex = 0;
@@ -219,7 +219,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 808);
+            ClientSize = new Size(800, 837);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);

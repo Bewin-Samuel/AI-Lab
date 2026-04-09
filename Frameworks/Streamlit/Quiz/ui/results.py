@@ -107,7 +107,8 @@ class ResultsDisplay:
 
         with col1:
             if st.button("🔄 **RETAKE QUIZ**", use_container_width=True):
-                st.session_state.clear()
+                # Reset only quiz flow data so theme and UI preferences are preserved.
+                QuizSessionState.reset_quiz()
                 st.rerun()
 
         with col2:

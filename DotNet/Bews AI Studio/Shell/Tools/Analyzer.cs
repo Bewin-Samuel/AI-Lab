@@ -6,20 +6,82 @@ namespace Shell.Tools
     public partial class Analyzer : BaseForm
     {
         private readonly ModelProvider _modelProvider = new();
+        private IReadOnlyList<ModelInfo> _loadedModels = [];
+
+        private const string SummarizationPrompt = """
+            You are an Expert in understanding & Summerizing the given content.
+            Always format your response exactly as follows:
+
+            Summary:
+            <provide a concise summary>
+
+            Actions:
+            <list actionable items>
+
+            Sentiments:
+            <describe the overall sentiment>
+            """;
 
         public Analyzer()
         {
             InitializeComponent();
         }
 
-        private void OnSummerize(object sender, EventArgs e)
-        {
-
-        }
-
         private void OnFormLoad(object sender, EventArgs e)
         {
             LoadTypeDropdown();
+        }
+
+        private async void OnSummerizeClick(object sender, EventArgs e)
+        {
+            var content = rtbContent.Text;
+
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                MessageBox.Show("Please enter content to summarize.", "Summarize", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                rtbContent.Focus();
+                return;
+            }
+
+            var apiKey = txtApiKey.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                MessageBox.Show("Please enter an API Key.", "Summarize", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtApiKey.Focus();
+                return;
+            }
+
+            if (cmbModels.SelectedIndex < 0 || cmbModels.SelectedIndex >= _loadedModels.Count)
+            {
+                MessageBox.Show("Please load and select a model.", "Summarize", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbModels.Focus();
+                return;
+            }
+
+            var provider = txtProviders.SelectedItem?.ToString() ?? string.Empty;
+            var modelId  = _loadedModels[cmbModels.SelectedIndex].Id;
+            var baseUrl  = txtBaseUrl.Text.Trim();
+
+            btnAnalyze.Enabled = false;
+            Cursor = Cursors.WaitCursor;
+            rtbResult.Clear();
+
+            try
+            {
+                var chatProvider = ChatProviderFactory.Create(provider, apiKey, modelId, baseUrl);
+                var result = await chatProvider.CompleteChatAsync(SummarizationPrompt, content);
+                rtbResult.Text = result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unable to summarize content: {ex.Message}", "Summarize", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnAnalyze.Enabled = true;
+                Cursor = Cursors.Default;
+            }
         }
 
         private void LoadTypeDropdown()
@@ -43,6 +105,7 @@ namespace Shell.Tools
             txtApiKey.Clear();
             txtBaseUrl.Clear();
             cmbModels.Items.Clear();
+            _loadedModels = [];
         }
 
         private async void OnLoadModelsClick(object sender, EventArgs e)
@@ -89,6 +152,7 @@ namespace Shell.Tools
         private void PopulateModelsDropdown(IReadOnlyList<ModelInfo> models)
         {
             cmbModels.Items.Clear();
+            _loadedModels = models;
 
             foreach (var model in models)
                 cmbModels.Items.Add(model.DisplayName);

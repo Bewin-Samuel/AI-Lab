@@ -29,8 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
-            btnSentimentAnalyzer = new Button();
-            btnSummerize = new Button();
+            btnAnalyze = new Button();
             rtbContent = new RichTextBox();
             label1 = new Label();
             groupBox2 = new GroupBox();
@@ -53,8 +52,7 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(btnSentimentAnalyzer);
-            groupBox1.Controls.Add(btnSummerize);
+            groupBox1.Controls.Add(btnAnalyze);
             groupBox1.Controls.Add(rtbContent);
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(19, 172);
@@ -63,26 +61,16 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
-            // btnSentimentAnalyzer
+            // btnAnalyze
             // 
-            btnSentimentAnalyzer.BackColor = SystemColors.ScrollBar;
-            btnSentimentAnalyzer.Location = new Point(392, 297);
-            btnSentimentAnalyzer.Name = "btnSentimentAnalyzer";
-            btnSentimentAnalyzer.Size = new Size(85, 40);
-            btnSentimentAnalyzer.TabIndex = 4;
-            btnSentimentAnalyzer.Text = "S&entiment Analyzer";
-            btnSentimentAnalyzer.UseVisualStyleBackColor = false;
-            // 
-            // btnSummerize
-            // 
-            btnSummerize.BackColor = SystemColors.ScrollBar;
-            btnSummerize.Location = new Point(292, 297);
-            btnSummerize.Name = "btnSummerize";
-            btnSummerize.Size = new Size(85, 40);
-            btnSummerize.TabIndex = 4;
-            btnSummerize.Text = "&Summerizer";
-            btnSummerize.UseVisualStyleBackColor = false;
-            btnSummerize.Click += OnSummerize;
+            btnAnalyze.BackColor = SystemColors.ScrollBar;
+            btnAnalyze.Location = new Point(342, 297);
+            btnAnalyze.Name = "btnAnalyze";
+            btnAnalyze.Size = new Size(85, 40);
+            btnAnalyze.TabIndex = 4;
+            btnAnalyze.Text = "&Analyze";
+            btnAnalyze.UseVisualStyleBackColor = false;
+            btnAnalyze.Click += OnSummerizeClick;
             // 
             // rtbContent
             // 
@@ -105,9 +93,9 @@
             // 
             groupBox2.Controls.Add(rtbResult);
             groupBox2.Controls.Add(lblResult);
-            groupBox2.Location = new Point(19, 539);
+            groupBox2.Location = new Point(19, 525);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(762, 227);
+            groupBox2.Size = new Size(762, 275);
             groupBox2.TabIndex = 5;
             groupBox2.TabStop = false;
             // 
@@ -115,7 +103,7 @@
             // 
             rtbResult.Location = new Point(24, 45);
             rtbResult.Name = "rtbResult";
-            rtbResult.Size = new Size(726, 189);
+            rtbResult.Size = new Size(726, 224);
             rtbResult.TabIndex = 1;
             rtbResult.Text = "";
             // 
@@ -124,9 +112,9 @@
             lblResult.AutoSize = true;
             lblResult.Location = new Point(9, 20);
             lblResult.Name = "lblResult";
-            lblResult.Size = new Size(53, 15);
+            lblResult.Size = new Size(118, 15);
             lblResult.TabIndex = 0;
-            lblResult.Text = "Content:";
+            lblResult.Text = "Summary & Sentiment";
             // 
             // groupBox3
             // 
@@ -141,7 +129,7 @@
             groupBox3.Controls.Add(label4);
             groupBox3.Location = new Point(19, 7);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(769, 159);
+            groupBox3.Size = new Size(624, 159);
             groupBox3.TabIndex = 6;
             groupBox3.TabStop = false;
             groupBox3.Text = "Key Details";
@@ -149,9 +137,9 @@
             // btnLoad
             // 
             btnLoad.BackColor = SystemColors.ScrollBar;
-            btnLoad.Location = new Point(507, 90);
+            btnLoad.Location = new Point(512, 18);
             btnLoad.Name = "btnLoad";
-            btnLoad.Size = new Size(85, 61);
+            btnLoad.Size = new Size(85, 133);
             btnLoad.TabIndex = 5;
             btnLoad.Text = "&Load Models";
             btnLoad.UseVisualStyleBackColor = false;
@@ -231,7 +219,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 853);
+            ClientSize = new Size(800, 808);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -253,8 +241,7 @@
         private GroupBox groupBox1;
         private Label label1;
         private RichTextBox rtbContent;
-        private Button btnSentimentAnalyzer;
-        private Button btnSummerize;
+        private Button btnAnalyze;
         private GroupBox groupBox2;
         private RichTextBox rtbResult;
         private Label lblResult;

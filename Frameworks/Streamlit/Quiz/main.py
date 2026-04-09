@@ -177,6 +177,7 @@ def main():
     elif (
         QuizSessionState.get_is_quiz_started()
         and QuizSessionState.get_is_quiz_complete()
+        and QuizSessionState.get_is_quiz_submitted()
         and not QuizSessionState.get_is_quiz_evaluated()
     ):
         try:

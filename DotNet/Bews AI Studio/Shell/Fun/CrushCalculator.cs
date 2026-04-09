@@ -31,7 +31,17 @@ namespace Shell.Fun
 
                 var modelFacilitator = new ModelFacilitator(GetModelData());
                 lblFlameResult.Text = FlameResultFormatter.Format(flameResult) + Environment.NewLine + Environment.NewLine;
-                lblFlameResult.AppendText(await modelFacilitator.GetHaikuAsync(flameResult.Crush1, flameResult.Crush2, flameResult.FinalResult));
+
+                if(chkHaiku.Checked)
+                {
+                    lblFlameResult.AppendText(await modelFacilitator.GetHaikuAsync(flameResult.Crush1, flameResult.Crush2, flameResult.FinalResult));
+                }
+
+                if (chkStory.Checked)
+                {
+                    lblFlameResult.AppendText(await modelFacilitator.GetShortStory(flameResult.Crush1, flameResult.Crush2, flameResult.FinalResult));
+                }
+
             }
             catch (Exception exception)
             {

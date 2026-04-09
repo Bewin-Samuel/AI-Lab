@@ -37,12 +37,16 @@
             label1 = new Label();
             groupBox2 = new GroupBox();
             lblFlameResult = new RichTextBox();
+            chkStory = new CheckBox();
+            chkHaiku = new CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(chkStory);
+            groupBox1.Controls.Add(chkHaiku);
             groupBox1.Controls.Add(btnAskAI);
             groupBox1.Controls.Add(btnCalculate);
             groupBox1.Controls.Add(txtCrush2);
@@ -136,6 +140,26 @@
             lblFlameResult.TabStop = false;
             lblFlameResult.Text = "";
             // 
+            // chkStory
+            // 
+            chkStory.AutoSize = true;
+            chkStory.Location = new Point(270, 119);
+            chkStory.Name = "chkStory";
+            chkStory.Size = new Size(53, 19);
+            chkStory.TabIndex = 7;
+            chkStory.Text = "Story";
+            chkStory.UseVisualStyleBackColor = true;
+            // 
+            // chkHaiku
+            // 
+            chkHaiku.AutoSize = true;
+            chkHaiku.Location = new Point(270, 98);
+            chkHaiku.Name = "chkHaiku";
+            chkHaiku.Size = new Size(57, 19);
+            chkHaiku.TabIndex = 6;
+            chkHaiku.Text = "Haiku";
+            chkHaiku.UseVisualStyleBackColor = true;
+            // 
             // CrushCalculator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -164,5 +188,7 @@
         private Button btnCalculate;
         private RichTextBox lblFlameResult;
         private Button btnAskAI;
+        private CheckBox chkStory;
+        private CheckBox chkHaiku;
     }
 }

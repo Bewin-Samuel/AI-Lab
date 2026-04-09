@@ -53,6 +53,11 @@ class ThemeManager:
             border-radius: 4px;
             border: none;
         }
+
+        .stButton > button p,
+        .stButton > button span {
+            color: white !important;
+        }
         
         .stButton > button:hover {
             background-color: #0052a3;
@@ -221,6 +226,11 @@ class ThemeManager:
             box-shadow: 0 6px 14px rgba(37, 99, 235, 0.28);
             transition: transform 120ms ease, box-shadow 120ms ease;
         }
+
+        .stButton > button p,
+        .stButton > button span {
+            color: #f8fbff !important;
+        }
         
         .stButton > button:hover {
             transform: translateY(-1px);
@@ -228,11 +238,21 @@ class ThemeManager:
             border-color: #38bdf8;
         }
 
+        .stButton > button:hover p,
+        .stButton > button:hover span {
+            color: #f8fbff !important;
+        }
+
         .stButton > button:disabled {
             background: #24324a;
             color: #8ea1b7;
             border-color: #31445f;
             box-shadow: none;
+        }
+
+        .stButton > button:disabled p,
+        .stButton > button:disabled span {
+            color: #8ea1b7 !important;
         }
 
         [data-testid="stMetric"] {
@@ -265,29 +285,160 @@ class ThemeManager:
             --text-color: #000000;
             --border-color: #000000;
         }
-        
-        body {
-            background-color: #ffffff;
-            color: #000000;
-            font-weight: bold;
+
+        html, body, [class*="css"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            font-weight: 700;
         }
-        
-        .stApp {
-            background-color: #ffffff;
+
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stHeader"] {
+            background: #ffffff !important;
+            color: #000000 !important;
         }
-        
+
+        [data-testid="stHeader"] {
+            border-bottom: 3px solid #000000;
+        }
+
+        [data-testid="stSidebar"] {
+            background: #ffffff !important;
+            border-right: 3px solid #000000;
+        }
+
+        h1, h2, h3, h4, h5, h6,
+        p, span, div, label, li {
+            color: #000000 !important;
+        }
+
+        hr {
+            border-color: #000000 !important;
+            border-width: 2px !important;
+        }
+
+        [data-testid="stAlert"] {
+            background: #ffffff !important;
+            border: 3px solid #000000 !important;
+            border-radius: 2px !important;
+        }
+
+        .stTextInput > div > div > input,
+        div[data-baseweb="input"] input,
+        div[data-baseweb="textarea"] textarea,
+        .stNumberInput input,
+        div[data-baseweb="select"] > div {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 3px solid #000000 !important;
+            border-radius: 2px !important;
+            box-shadow: none !important;
+            font-weight: 700;
+        }
+
+        .stRadio [role="radiogroup"] label {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 3px solid #000000 !important;
+            border-radius: 2px !important;
+            padding: 8px 10px;
+        }
+
+        .stRadio [role="radiogroup"] label:has(input:checked) {
+            background-color: #ffcc00 !important;
+            color: #000000 !important;
+        }
+
+        div[data-baseweb="menu"],
+        div[data-baseweb="menu"] ul,
+        div[data-baseweb="menu"] li,
+        div[data-baseweb="menu"] [role="option"],
+        ul[role="listbox"],
+        li[role="option"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-color: #000000 !important;
+            font-weight: 700;
+        }
+
+        div[data-baseweb="menu"] {
+            border: 3px solid #000000 !important;
+            border-radius: 2px !important;
+        }
+
+        div[data-baseweb="menu"] [role="option"]:hover,
+        li[role="option"]:hover,
+        div[data-baseweb="menu"] li:hover,
+        div[data-baseweb="menu"] [aria-selected="true"],
+        li[aria-selected="true"] {
+            background-color: #ffcc00 !important;
+            color: #000000 !important;
+        }
+
+        .stProgress > div > div > div {
+            background-color: #d9d9d9 !important;
+        }
+
+        .stProgress > div > div > div > div {
+            background: #000000 !important;
+        }
+
         .stButton > button {
-            background-color: #000000;
-            color: #ffcc00;
-            border: 2px solid #000000;
-            border-radius: 2px;
-            font-weight: bold;
+            background-color: #000000 !important;
+            color: #ffcc00 !important;
+            border: 3px solid #000000 !important;
+            border-radius: 2px !important;
+            font-weight: 800;
             font-size: 16px;
+            box-shadow: none !important;
         }
-        
+
+        .stButton > button p,
+        .stButton > button span {
+            color: #ffcc00 !important;
+        }
+
         .stButton > button:hover {
-            background-color: #ffcc00;
-            color: #000000;
+            background-color: #ffcc00 !important;
+            color: #000000 !important;
+            border-color: #000000 !important;
+        }
+
+        .stButton > button:hover p,
+        .stButton > button:hover span {
+            color: #000000 !important;
+        }
+
+        .stButton > button:disabled {
+            background-color: #bfbfbf !important;
+            color: #000000 !important;
+            border-color: #000000 !important;
+        }
+
+        .stButton > button:disabled p,
+        .stButton > button:disabled span {
+            color: #000000 !important;
+        }
+
+        [data-testid="stMetric"] {
+            background: #ffffff !important;
+            border: 3px solid #000000 !important;
+            border-radius: 2px !important;
+            color: #000000 !important;
+        }
+
+        code, pre {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #000000 !important;
+            border-radius: 2px !important;
+        }
+
+        *:focus-visible {
+            outline: 4px solid #ff6600 !important;
+            outline-offset: 2px !important;
         }
         </style>
         """, unsafe_allow_html=True)

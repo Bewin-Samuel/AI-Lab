@@ -34,14 +34,17 @@ namespace Shell.Fun
 
                 if(chkHaiku.Checked)
                 {
+                    lblFlameResult.AppendText("Haiku..." + Environment.NewLine);
                     lblFlameResult.AppendText(await modelFacilitator.GetHaikuAsync(flameResult.Crush1, flameResult.Crush2, flameResult.FinalResult));
+                    lblFlameResult.AppendText(Environment.NewLine);
+                    lblFlameResult.AppendText(Environment.NewLine);
                 }
 
                 if (chkStory.Checked)
                 {
+                    lblFlameResult.AppendText("Short story..." + Environment.NewLine);
                     lblFlameResult.AppendText(await modelFacilitator.GetShortStory(flameResult.Crush1, flameResult.Crush2, flameResult.FinalResult));
                 }
-
             }
             catch (Exception exception)
             {

@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            chkStory = new CheckBox();
+            chkHaiku = new CheckBox();
             btnAskAI = new Button();
             btnCalculate = new Button();
             txtCrush2 = new TextBox();
@@ -37,8 +39,6 @@
             label1 = new Label();
             groupBox2 = new GroupBox();
             lblFlameResult = new RichTextBox();
-            chkStory = new CheckBox();
-            chkHaiku = new CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -59,6 +59,30 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Name";
+            // 
+            // chkStory
+            // 
+            chkStory.AutoSize = true;
+            chkStory.Checked = true;
+            chkStory.CheckState = CheckState.Checked;
+            chkStory.Location = new Point(270, 119);
+            chkStory.Name = "chkStory";
+            chkStory.Size = new Size(53, 19);
+            chkStory.TabIndex = 7;
+            chkStory.Text = "Story";
+            chkStory.UseVisualStyleBackColor = true;
+            // 
+            // chkHaiku
+            // 
+            chkHaiku.AutoSize = true;
+            chkHaiku.Checked = true;
+            chkHaiku.CheckState = CheckState.Checked;
+            chkHaiku.Location = new Point(270, 98);
+            chkHaiku.Name = "chkHaiku";
+            chkHaiku.Size = new Size(57, 19);
+            chkHaiku.TabIndex = 6;
+            chkHaiku.Text = "Haiku";
+            chkHaiku.UseVisualStyleBackColor = true;
             // 
             // btnAskAI
             // 
@@ -139,26 +163,6 @@
             lblFlameResult.TabIndex = 0;
             lblFlameResult.TabStop = false;
             lblFlameResult.Text = "";
-            // 
-            // chkStory
-            // 
-            chkStory.AutoSize = true;
-            chkStory.Location = new Point(270, 119);
-            chkStory.Name = "chkStory";
-            chkStory.Size = new Size(53, 19);
-            chkStory.TabIndex = 7;
-            chkStory.Text = "Story";
-            chkStory.UseVisualStyleBackColor = true;
-            // 
-            // chkHaiku
-            // 
-            chkHaiku.AutoSize = true;
-            chkHaiku.Location = new Point(270, 98);
-            chkHaiku.Name = "chkHaiku";
-            chkHaiku.Size = new Size(57, 19);
-            chkHaiku.TabIndex = 6;
-            chkHaiku.Text = "Haiku";
-            chkHaiku.UseVisualStyleBackColor = true;
             // 
             // CrushCalculator
             // 

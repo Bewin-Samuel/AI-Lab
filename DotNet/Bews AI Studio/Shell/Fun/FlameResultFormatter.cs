@@ -32,7 +32,8 @@ internal static class FlameResultFormatter
         }
 
         sb.AppendLine();
-        sb.Append($"🔥 Result: {result.FinalResult}");
+        sb.AppendLine($"🔥 Result:");
+        sb.Append($"{result.Crush1} shares a {result.FinalResult} with {result.Crush2}");
 
         return sb.ToString();
     }

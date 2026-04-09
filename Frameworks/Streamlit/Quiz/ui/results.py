@@ -1,7 +1,8 @@
 """Results display component for showing quiz evaluation."""
 
 import streamlit as st
-from config.constants import EvaluationResult
+from config.constants import EvaluationResult, Theme
+from state.quiz_state import QuizSessionState
 
 
 class ResultsDisplay:
@@ -18,6 +19,7 @@ class ResultsDisplay:
         """
         st.markdown("---")
         st.markdown("# 🏆 **Quiz Results**")
+        is_dark_theme = QuizSessionState.get_theme() == Theme.DARK
 
         # Score display (large, prominent)
         col1, col2, col3 = st.columns(3)
@@ -35,8 +37,10 @@ class ResultsDisplay:
                 color = "red"
                 emoji = "💪"
 
+            score_card_bg = "rgba(17, 26, 45, 0.82)" if is_dark_theme else "transparent"
+
             st.markdown(f"""
-            <div style='text-align: center; padding: 20px; border: 2px solid {color}; border-radius: 10px;'>
+            <div style='text-align: center; padding: 20px; border: 2px solid {color}; border-radius: 10px; background-color: {score_card_bg};'>
                 <h2>{emoji} Score: {score:.1f}%</h2>
             </div>
             """, unsafe_allow_html=True)
@@ -45,8 +49,10 @@ class ResultsDisplay:
             # Time taken
             minutes = int(elapsed_time // 60)
             seconds = int(elapsed_time % 60)
+            time_card_bg = "rgba(17, 26, 45, 0.82)" if is_dark_theme else "#f0f2f6"
+            time_card_text = "#e5edf7" if is_dark_theme else "#1e1e1e"
             st.markdown(f"""
-            <div style='text-align: center; padding: 20px; background-color: #f0f2f6; border-radius: 10px;'>
+            <div style='text-align: center; padding: 20px; background-color: {time_card_bg}; color: {time_card_text}; border-radius: 10px; border: 1px solid rgba(74, 168, 255, 0.22);'>
                 <h3>⏱️ **Time Taken**</h3>
                 <h2>{minutes}:{seconds:02d}</h2>
             </div>

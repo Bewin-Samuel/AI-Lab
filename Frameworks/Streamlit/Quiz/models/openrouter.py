@@ -1,7 +1,9 @@
 """OpenRouter model vendor implementation."""
 
 import json
+import os
 import re
+import ssl
 from typing import List
 import httpx
 from models.base import BaseModelVendor
@@ -11,11 +13,28 @@ from config.constants import QuizQuestion, EvaluationResult
 class OpenRouterVendor(BaseModelVendor):
     """OpenRouter API implementation."""
 
-    OPENROUTER_API_URL = "https://openrouter.io/api/v1/chat/completions"
+    OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
     def __init__(self, api_key: str, model_id: str):
         """Initialize with OpenRouter API key and model ID."""
         super().__init__(api_key, model_id)
+
+    def _get_tls_verify(self):
+        """Build TLS verification config with optional custom CA bundle."""
+        ca_bundle = os.getenv("OPENROUTER_CA_BUNDLE", "").strip()
+        if ca_bundle:
+            if not os.path.exists(ca_bundle):
+                raise Exception(
+                    f"OPENROUTER_CA_BUNDLE path not found: {ca_bundle}"
+                )
+            return ssl.create_default_context(cafile=ca_bundle)
+
+        # Prefer OS trust store when truststore is available.
+        try:
+            import truststore
+            return truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        except Exception:
+            return ssl.create_default_context()
 
     def validate_credentials(self) -> bool:
         """
@@ -40,7 +59,7 @@ class OpenRouterVendor(BaseModelVendor):
                 "max_tokens": 10,
             }
 
-            with httpx.Client() as client:
+            with httpx.Client(verify=self._get_tls_verify()) as client:
                 response = client.post(
                     self.OPENROUTER_API_URL,
                     headers=headers,
@@ -49,6 +68,30 @@ class OpenRouterVendor(BaseModelVendor):
                 )
                 response.raise_for_status()
             return True
+
+        except httpx.TransportError as e:
+            if "CERTIFICATE_VERIFY_FAILED" in str(e).upper():
+                raise Exception(
+                    "OpenRouter SSL certificate verification failed. "
+                    "If your network uses a custom/corporate CA, set OPENROUTER_CA_BUNDLE "
+                    "to your CA bundle path, or install the truststore package."
+                )
+            raise Exception(
+                f"OpenRouter API validation failed: {str(e)}. "
+                f"Please verify your network connectivity and TLS settings."
+            )
+
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 405:
+                raise Exception(
+                    "OpenRouter returned 405 Method Not Allowed. "
+                    "Please ensure the request is sent to https://openrouter.ai/api/v1/chat/completions "
+                    "and retry validation."
+                )
+            raise Exception(
+                f"OpenRouter API validation failed: {str(e)}. "
+                f"Please verify your API key and model ID."
+            )
 
         except Exception as e:
             raise Exception(
@@ -91,7 +134,7 @@ class OpenRouterVendor(BaseModelVendor):
                 "max_tokens": 4096,
             }
 
-            with httpx.Client() as client:
+            with httpx.Client(verify=self._get_tls_verify()) as client:
                 response = client.post(
                     self.OPENROUTER_API_URL,
                     headers=headers,
@@ -161,7 +204,7 @@ class OpenRouterVendor(BaseModelVendor):
                 "max_tokens": 2048,
             }
 
-            with httpx.Client() as client:
+            with httpx.Client(verify=self._get_tls_verify()) as client:
                 response = client.post(
                     self.OPENROUTER_API_URL,
                     headers=headers,

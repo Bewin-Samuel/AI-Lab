@@ -15,7 +15,7 @@ from ui.results import ResultsDisplay
 def setup_page():
     """Configure Streamlit page settings."""
     st.set_page_config(
-        page_title="Project CooL Quiz Master",
+        page_title="QuizCraft AI",
         page_icon="🎓",
         layout="wide",
         initial_sidebar_state="expanded"
@@ -29,10 +29,10 @@ def render_welcome_screen():
     with col1:
         st.markdown("## 🎓")
     with col2:
-        st.title("**Project CooL Quiz Master**")
+        st.title("**QuizCraft AI**")
 
     st.markdown("""
-    ### Welcome to the AI-Powered Quiz Application!
+    ### Welcome to QuizCraft AI!
     
     Test your knowledge across multiple domains with AI-generated questions.
     

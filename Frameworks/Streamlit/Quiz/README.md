@@ -1,4 +1,4 @@
-# 🎓 AI Quiz Master
+# 🎓 QuizCraft AI
 
 A sophisticated, multi-vendor AI-powered quiz application built with Streamlit. Test your knowledge across multiple domains with adaptive questions generated and evaluated by leading AI models.
 

@@ -33,7 +33,7 @@ namespace Shell
 
         private void OnSummerizerClick(object sender, EventArgs e)
         {
-            ShowMdiChild(new Summerizer());
+            ShowMdiChild(new Analyzer());
         }
     }
 }

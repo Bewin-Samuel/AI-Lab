@@ -1,6 +1,6 @@
 # 🏛️ Design Principles & Best Practices
 
-This document explains the architectural decisions and design patterns used in the AI Quiz Master application, demonstrating SOLID principles and professional software engineering practices.
+This document explains the architectural decisions and design patterns used in the QuizCraft AI application, demonstrating SOLID principles and professional software engineering practices.
 
 ---
 

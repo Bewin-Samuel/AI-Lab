@@ -1,6 +1,6 @@
 ﻿namespace Shell.Tools
 {
-    partial class Summerizer
+    partial class Analyzer
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
-            btnSentiment = new Button();
+            btnSentimentAnalyzer = new Button();
             btnSummerize = new Button();
             rtbContent = new RichTextBox();
             label1 = new Label();
@@ -53,7 +53,7 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(btnSentiment);
+            groupBox1.Controls.Add(btnSentimentAnalyzer);
             groupBox1.Controls.Add(btnSummerize);
             groupBox1.Controls.Add(rtbContent);
             groupBox1.Controls.Add(label1);
@@ -63,15 +63,15 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
-            // btnSentiment
+            // btnSentimentAnalyzer
             // 
-            btnSentiment.BackColor = SystemColors.ScrollBar;
-            btnSentiment.Location = new Point(392, 297);
-            btnSentiment.Name = "btnSentiment";
-            btnSentiment.Size = new Size(85, 40);
-            btnSentiment.TabIndex = 4;
-            btnSentiment.Text = "S&entiment Analysis";
-            btnSentiment.UseVisualStyleBackColor = false;
+            btnSentimentAnalyzer.BackColor = SystemColors.ScrollBar;
+            btnSentimentAnalyzer.Location = new Point(392, 297);
+            btnSentimentAnalyzer.Name = "btnSentimentAnalyzer";
+            btnSentimentAnalyzer.Size = new Size(85, 40);
+            btnSentimentAnalyzer.TabIndex = 4;
+            btnSentimentAnalyzer.Text = "S&entiment Analyzer";
+            btnSentimentAnalyzer.UseVisualStyleBackColor = false;
             // 
             // btnSummerize
             // 
@@ -216,6 +216,7 @@
             txtProviders.Name = "txtProviders";
             txtProviders.Size = new Size(358, 23);
             txtProviders.TabIndex = 0;
+            txtProviders.SelectedIndexChanged += OnProviderChanged;
             // 
             // label4
             // 
@@ -226,7 +227,7 @@
             label4.TabIndex = 0;
             label4.Text = "Providers";
             // 
-            // Summerizer
+            // Analyzer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -234,9 +235,9 @@
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
-            Name = "Summerizer";
+            Name = "Analyzer";
             ShowInTaskbar = false;
-            Text = "Summerizer";
+            Text = "Analyzer";
             Load += OnFormLoad;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -252,7 +253,7 @@
         private GroupBox groupBox1;
         private Label label1;
         private RichTextBox rtbContent;
-        private Button btnSentiment;
+        private Button btnSentimentAnalyzer;
         private Button btnSummerize;
         private GroupBox groupBox2;
         private RichTextBox rtbResult;

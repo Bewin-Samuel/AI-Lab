@@ -1,4 +1,5 @@
 ﻿using Shell.Common;
+using Shell.Core;
 using System.Net.Http.Headers;
 
 namespace Shell.Tools
@@ -6,7 +7,9 @@ namespace Shell.Tools
     public partial class KeyValidator : BaseForm
     {
         private static readonly HttpClient HttpClient = new();
-        private List<ModelDetailInfo> _allModels = new();
+        private readonly ModelProvider _modelProvider = new();
+        private List<ModelInfo> _allModels = [];
+        private IReadOnlyList<ModelInfo> _loadedModels = [];
 
         public KeyValidator()
         {
@@ -39,6 +42,8 @@ namespace Shell.Tools
             lblKeyDetails.Text = string.Empty;
             dgvModels.Rows.Clear();
             _allModels.Clear();
+            cmbModels.Items.Clear();
+            _loadedModels = [];
         }
 
         private async void OnKeyValidateClick(object? sender, EventArgs e)
@@ -62,7 +67,7 @@ namespace Shell.Tools
 
             try
             {
-                isValid = await ValidateKeyAsync(keyType, key, txtBaseUrl.Text.Trim());
+                isValid = await _modelProvider.ValidateKeyAsync(keyType, key, txtBaseUrl.Text.Trim());
             }
             finally
             {
@@ -75,120 +80,6 @@ namespace Shell.Tools
                 "Validation",
                 MessageBoxButtons.OK,
                 isValid ? MessageBoxIcon.Information : MessageBoxIcon.Error);
-        }
-
-        private static async Task<bool> ValidateKeyAsync(string keyType, string key, string baseUrl = "")
-        {
-            var normalizedKey = key.Trim();
-
-            if (string.IsNullOrWhiteSpace(normalizedKey))
-            {
-                return false;
-            }
-
-            return keyType switch
-            {
-                "Azure Open AI" => await ValidateAzureOpenAIKeyAsync(normalizedKey, baseUrl),
-                "Open Router" => await ValidateOpenRouterKeyAsync(normalizedKey),
-                "Open AI" => await ValidateOpenAiKeyAsync(normalizedKey),
-                "Hugging Face" => await ValidateHuggingFaceKeyAsync(normalizedKey),
-                "Gemini" => await ValidateGeminiKeyAsync(normalizedKey),
-                "GitHub" => await ValidateGitHubKeyAsync(normalizedKey),
-                _ => false
-            };
-        }
-
-        private static async Task<bool> ValidateOpenAiKeyAsync(string key)
-        {
-            try
-            {
-                using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
-                using var response = await HttpClient.SendAsync(request);
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                return false;
-            }
-        }
-
-        private static async Task<bool> ValidateAzureOpenAIKeyAsync(string key, string baseUrl)
-        {
-            try
-            {
-                return await AzureOpenAIMediator.ValidateAzureOpenAIKeyAsync(key, baseUrl);
-            }
-            catch (HttpRequestException)
-            {
-                return false;
-            }
-        }
-
-        private static async Task<bool> ValidateOpenRouterKeyAsync(string key)
-        {
-            try
-            {
-                using var request = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/auth/key");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
-
-                using var response = await HttpClient.SendAsync(request);
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                return false;
-            }
-        }
-
-        private static async Task<bool> ValidateGeminiKeyAsync(string key)
-        {
-            try
-            {
-                var requestUri = $"https://generativelanguage.googleapis.com/v1beta/models?key={Uri.EscapeDataString(key)}";
-                using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-
-                using var response = await HttpClient.SendAsync(request);
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                return false;
-            }
-        }
-
-        private static async Task<bool> ValidateHuggingFaceKeyAsync(string key)
-        {
-            try
-            {
-                using var request = new HttpRequestMessage(HttpMethod.Get, "https://huggingface.co/api/whoami-v2");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
-
-                using var response = await HttpClient.SendAsync(request);
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                return false;
-            }
-        }
-
-        private static async Task<bool> ValidateGitHubKeyAsync(string key)
-        {
-            try
-            {
-                using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
-                request.Headers.UserAgent.ParseAdd("BewsAIStudio/1.0");
-                request.Headers.Accept.ParseAdd("application/vnd.github+json");
-
-                using var response = await HttpClient.SendAsync(request);
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                return false;
-            }
         }
 
         private async void OnKeyDetailsClick(object sender, EventArgs e)
@@ -484,6 +375,7 @@ namespace Shell.Tools
             var keyType = cmbKeyType.SelectedItem?.ToString() ?? string.Empty;
 
             btnModelDetails.Enabled = false;
+            btnLoadModels.Enabled = false;
             btnKeyDetails.Enabled = false;
             btnValidate.Enabled = false;
             Cursor = Cursors.WaitCursor;
@@ -491,17 +383,18 @@ namespace Shell.Tools
             try
             {
                 InitializeModelGridColumns();
-                _allModels = await GetModelDetailsAsync(keyType, key.Trim());
+                _allModels = [.. await _modelProvider.GetModelsAsync(keyType, key.Trim())];
                 ApplyModelFilter();
             }
             catch
             {
-                _allModels = new List<ModelDetailInfo>();
+                _allModels = [];
                 dgvModels.Rows.Clear();
             }
             finally
             {
                 btnModelDetails.Enabled = true;
+                btnLoadModels.Enabled = true;
                 btnKeyDetails.Enabled = true;
                 btnValidate.Enabled = true;
                 Cursor = Cursors.Default;
@@ -565,272 +458,70 @@ namespace Shell.Tools
             });
         }
 
-        private static async Task<List<ModelDetailInfo>> GetModelDetailsAsync(string keyType, string key)
+        private void OnProviderChanged(object? sender, EventArgs e)
         {
-            return keyType switch
-            {
-                "Open Router" => await GetOpenRouterModelsAsync(key),
-                "Open AI" => await GetOpenAiModelsAsync(key),
-                "Gemini" => await GetGeminiModelsAsync(key),
-                "Hugging Face" => await GetHuggingFaceModelsAsync(key),
-                "GitHub" => await GetGitHubModelsAsync(key),
-                _ => new List<ModelDetailInfo>()
-            };
+            txtKey.Clear();
+            txtBaseUrl.Clear();
+            ClearKeyDetails();
         }
 
-        private static async Task<List<ModelDetailInfo>> GetOpenAiModelsAsync(string key)
+        private async void OnLoadModelsClick(object? sender, EventArgs e)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.openai.com/v1/models");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
+            var key = txtKey.Text;
 
-            using var response = await HttpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
+            if (string.IsNullOrWhiteSpace(key))
             {
-                return new List<ModelDetailInfo>();
+                MessageBox.Show("Please enter a key.", "Load Models", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtKey.Focus();
+                return;
             }
 
-            using var stream = await response.Content.ReadAsStreamAsync();
-            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
-            var models = new List<ModelDetailInfo>();
+            var provider = cmbKeyType.SelectedItem?.ToString() ?? string.Empty;
 
-            if (!document.RootElement.TryGetProperty("data", out var data) ||
-                data.ValueKind != System.Text.Json.JsonValueKind.Array)
+            SetAllButtonsEnabled(false);
+            Cursor = Cursors.WaitCursor;
+
+            try
             {
-                return models;
-            }
+                var isValid = await _modelProvider.ValidateKeyAsync(provider, key.Trim(), txtBaseUrl.Text.Trim());
 
-            foreach (var model in data.EnumerateArray())
-            {
-                var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
-                var modelName = modelId;
-
-                models.Add(new ModelDetailInfo
+                if (!isValid)
                 {
-                    ModelName = modelName,
-                    ModelId = modelId,
-                    ModelType = "N/A",
-                    Params = ExtractParamsFromName(modelId, modelName)
-                });
-            }
-
-            return models;
-        }
-
-        private static async Task<List<ModelDetailInfo>> GetOpenRouterModelsAsync(string key)
-        {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://openrouter.ai/api/v1/models");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
-
-            using var response = await HttpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                return new List<ModelDetailInfo>();
-            }
-
-            using var stream = await response.Content.ReadAsStreamAsync();
-            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
-            var models = new List<ModelDetailInfo>();
-
-            if (!document.RootElement.TryGetProperty("data", out var data) ||
-                data.ValueKind != System.Text.Json.JsonValueKind.Array)
-            {
-                return models;
-            }
-
-            foreach (var model in data.EnumerateArray())
-            {
-                var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
-                var modelName = model.TryGetProperty("name", out var nameElement) ? nameElement.GetString() ?? modelId : modelId;
-                var modelType = "Paid";
-
-                if (model.TryGetProperty("pricing", out var pricing))
-                {
-                    var prompt = GetDecimalProperty(pricing, "prompt");
-                    var completion = GetDecimalProperty(pricing, "completion");
-                    modelType = prompt.GetValueOrDefault() <= 0m && completion.GetValueOrDefault() <= 0m ? "Free" : "Paid";
+                    MessageBox.Show("Key validation failed. Please check your key and try again.",
+                        "Load Models", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
-                models.Add(new ModelDetailInfo
-                {
-                    ModelName = modelName,
-                    ModelId = modelId,
-                    ModelType = modelType,
-                    Params = ExtractParamsFromName(modelId, modelName)
-                });
+                _loadedModels = await _modelProvider.GetModelsAsync(provider, key.Trim(), txtBaseUrl.Text.Trim());
+                PopulateModelsDropdown(_loadedModels);
             }
-
-            return models;
+            catch
+            {
+                MessageBox.Show("Unable to load models.", "Load Models", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                SetAllButtonsEnabled(true);
+                Cursor = Cursors.Default;
+            }
         }
 
-        private static async Task<List<ModelDetailInfo>> GetGeminiModelsAsync(string key)
+        private void PopulateModelsDropdown(IReadOnlyList<ModelInfo> models)
         {
-            var requestUri = $"https://generativelanguage.googleapis.com/v1beta/models?key={Uri.EscapeDataString(key)}";
-            using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            cmbModels.Items.Clear();
+            foreach (var model in models)
+                cmbModels.Items.Add(model.DisplayName);
 
-            using var response = await HttpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                return new List<ModelDetailInfo>();
-            }
-
-            using var stream = await response.Content.ReadAsStreamAsync();
-            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
-            var models = new List<ModelDetailInfo>();
-
-            if (!document.RootElement.TryGetProperty("models", out var modelArray) ||
-                modelArray.ValueKind != System.Text.Json.JsonValueKind.Array)
-            {
-                return models;
-            }
-
-            foreach (var model in modelArray.EnumerateArray())
-            {
-                var modelId = model.TryGetProperty("name", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
-                var modelName = model.TryGetProperty("displayName", out var nameElement) ? nameElement.GetString() ?? modelId : modelId;
-
-                models.Add(new ModelDetailInfo
-                {
-                    ModelName = modelName,
-                    ModelId = modelId,
-                    ModelType = "N/A",
-                    Params = ExtractParamsFromName(modelId, modelName)
-                });
-            }
-
-            return models;
+            if (cmbModels.Items.Count > 0)
+                cmbModels.SelectedIndex = 0;
         }
 
-        private static async Task<List<ModelDetailInfo>> GetHuggingFaceModelsAsync(string key)
+        private void SetAllButtonsEnabled(bool enabled)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://huggingface.co/api/models?limit=100");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
-
-            using var response = await HttpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                return new List<ModelDetailInfo>();
-            }
-
-            using var stream = await response.Content.ReadAsStreamAsync();
-            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
-            var models = new List<ModelDetailInfo>();
-
-            if (document.RootElement.ValueKind != System.Text.Json.JsonValueKind.Array)
-            {
-                return models;
-            }
-
-            foreach (var model in document.RootElement.EnumerateArray())
-            {
-                var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
-                var hfParams = TryGetHuggingFaceParams(model);
-                models.Add(new ModelDetailInfo
-                {
-                    ModelName = modelId,
-                    ModelId = modelId,
-                    ModelType = "N/A",
-                    Params = hfParams ?? ExtractParamsFromName(modelId)
-                });
-            }
-
-            return models;
-        }
-
-        private static async Task<List<ModelDetailInfo>> GetGitHubModelsAsync(string key)
-        {
-            using var request = new HttpRequestMessage(HttpMethod.Get, "https://models.inference.ai.azure.com/models");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", key);
-            request.Headers.UserAgent.ParseAdd("BewsAIStudio/1.0");
-
-            using var response = await HttpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                return new List<ModelDetailInfo>();
-            }
-
-            using var stream = await response.Content.ReadAsStreamAsync();
-            using var document = await System.Text.Json.JsonDocument.ParseAsync(stream);
-            var models = new List<ModelDetailInfo>();
-
-            if (document.RootElement.ValueKind != System.Text.Json.JsonValueKind.Array)
-            {
-                return models;
-            }
-
-            foreach (var model in document.RootElement.EnumerateArray())
-            {
-                var modelId = model.TryGetProperty("id", out var idElement) ? idElement.GetString() ?? string.Empty : string.Empty;
-                var modelName = model.TryGetProperty("name", out var nameElement) ? nameElement.GetString() ?? modelId : modelId;
-
-                models.Add(new ModelDetailInfo
-                {
-                    ModelName = modelName,
-                    ModelId = modelId,
-                    ModelType = "N/A",
-                    Params = ExtractParamsFromName(modelId, modelName)
-                });
-            }
-
-            return models;
-        }
-
-        private sealed class ModelDetailInfo
-        {
-            public string ModelName { get; set; } = string.Empty;
-            public string ModelId { get; set; } = string.Empty;
-            public string ModelType { get; set; } = string.Empty;
-            public string Params { get; set; } = "N/A";
-        }
-
-        private static string ExtractParamsFromName(params string[] names)
-        {
-            var regex = new System.Text.RegularExpressions.Regex(@"(\d+\.?\d*)[xX]?(\d+\.?\d*)?[\s\-_]?[bB]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-
-            foreach (var name in names)
-            {
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    continue;
-                }
-
-                var match = regex.Match(name);
-                if (match.Success)
-                {
-                    return match.Value.Trim('-', '_', ' ').ToUpperInvariant();
-                }
-            }
-
-            return "N/A";
-        }
-
-        private static string? TryGetHuggingFaceParams(System.Text.Json.JsonElement model)
-        {
-            if (!model.TryGetProperty("safetensors", out var safetensors) ||
-                safetensors.ValueKind != System.Text.Json.JsonValueKind.Object)
-            {
-                return null;
-            }
-
-            if (!safetensors.TryGetProperty("total", out var total) ||
-                total.ValueKind != System.Text.Json.JsonValueKind.Number ||
-                !total.TryGetInt64(out var totalParams) ||
-                totalParams <= 0)
-            {
-                return null;
-            }
-
-            return FormatParamCount(totalParams);
-        }
-
-        private static string FormatParamCount(long count)
-        {
-            return count switch
-            {
-                >= 1_000_000_000 => $"{count / 1_000_000_000d:0.##}B",
-                >= 1_000_000 => $"{count / 1_000_000d:0.##}M",
-                >= 1_000 => $"{count / 1_000d:0.##}K",
-                _ => count.ToString()
-            };
+            btnValidate.Enabled      = enabled;
+            btnKeyDetails.Enabled    = enabled;
+            btnModelDetails.Enabled  = enabled;
+            btnLoadModels.Enabled    = enabled;
         }
 
         private void OnModelSearchTextChanged(object? sender, EventArgs e)
@@ -841,13 +532,13 @@ namespace Shell.Tools
         private void ApplyModelFilter()
         {
             var query = txtModelSearch.Text.Trim();
-            IEnumerable<ModelDetailInfo> filtered = _allModels;
+            IEnumerable<ModelInfo> filtered = _allModels;
 
             if (!string.IsNullOrWhiteSpace(query))
             {
                 filtered = _allModels.Where(model =>
-                    ContainsIgnoreCase(model.ModelName, query) ||
-                    ContainsIgnoreCase(model.ModelId, query) ||
+                    ContainsIgnoreCase(model.DisplayName, query) ||
+                    ContainsIgnoreCase(model.Id, query) ||
                     ContainsIgnoreCase(model.ModelType, query) ||
                     ContainsIgnoreCase(model.Params, query));
             }
@@ -855,14 +546,14 @@ namespace Shell.Tools
             BindModelGrid(filtered.ToList());
         }
 
-        private void BindModelGrid(List<ModelDetailInfo> models)
+        private void BindModelGrid(List<ModelInfo> models)
         {
             dgvModels.Rows.Clear();
 
             for (var i = 0; i < models.Count; i++)
             {
                 var model = models[i];
-                dgvModels.Rows.Add(i + 1, model.ModelName, model.ModelId, model.ModelType, model.Params);
+                dgvModels.Rows.Add(i + 1, model.DisplayName, model.Id, model.ModelType, model.Params);
             }
         }
 

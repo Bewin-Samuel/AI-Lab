@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            btnLoadModels = new Button();
+            cmbModels = new ComboBox();
+            lblModels = new Label();
             btnModelDetails = new Button();
             btnKeyDetails = new Button();
             btnValidate = new Button();
@@ -52,6 +55,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnLoadModels);
+            groupBox1.Controls.Add(cmbModels);
+            groupBox1.Controls.Add(lblModels);
             groupBox1.Controls.Add(btnModelDetails);
             groupBox1.Controls.Add(btnKeyDetails);
             groupBox1.Controls.Add(btnValidate);
@@ -63,7 +69,7 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(12, 10);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(508, 159);
+            groupBox1.Size = new Size(508, 200);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Key Details";
@@ -78,6 +84,34 @@
             btnModelDetails.Text = "Model &Details";
             btnModelDetails.UseVisualStyleBackColor = false;
             btnModelDetails.Click += OnModelDetailsClick;
+            // 
+            // btnLoadModels
+            // 
+            btnLoadModels.BackColor = SystemColors.ScrollBar;
+            btnLoadModels.Location = new Point(382, 160);
+            btnLoadModels.Name = "btnLoadModels";
+            btnLoadModels.Size = new Size(110, 30);
+            btnLoadModels.TabIndex = 6;
+            btnLoadModels.Text = "Load &Models";
+            btnLoadModels.UseVisualStyleBackColor = false;
+            btnLoadModels.Click += OnLoadModelsClick;
+            // 
+            // lblModels
+            // 
+            lblModels.AutoSize = true;
+            lblModels.Location = new Point(16, 167);
+            lblModels.Name = "lblModels";
+            lblModels.TabIndex = 8;
+            lblModels.Text = "Model";
+            // 
+            // cmbModels
+            // 
+            cmbModels.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbModels.FormattingEnabled = true;
+            cmbModels.Location = new Point(129, 163);
+            cmbModels.Name = "cmbModels";
+            cmbModels.Size = new Size(240, 23);
+            cmbModels.TabIndex = 7;
             // 
             // btnKeyDetails
             // 
@@ -142,20 +176,21 @@
             cmbKeyType.Name = "cmbKeyType";
             cmbKeyType.Size = new Size(358, 23);
             cmbKeyType.TabIndex = 0;
+            cmbKeyType.SelectedIndexChanged += OnProviderChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Location = new Point(16, 19);
             label1.Name = "label1";
-            label1.Size = new Size(32, 15);
+            label1.Size = new Size(56, 15);
             label1.TabIndex = 0;
-            label1.Text = "Type";
+            label1.Text = "Providers";
             // 
             // groupBox2
             // 
             groupBox2.Controls.Add(lblKeyDetails);
-            groupBox2.Location = new Point(12, 184);
+            groupBox2.Location = new Point(12, 220);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(508, 150);
             groupBox2.TabIndex = 1;
@@ -175,7 +210,7 @@
             groupBox3.Controls.Add(txtModelSearch);
             groupBox3.Controls.Add(lblModelSearch);
             groupBox3.Controls.Add(dgvModels);
-            groupBox3.Location = new Point(12, 343);
+            groupBox3.Location = new Point(12, 384);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(508, 403);
             groupBox3.TabIndex = 2;
@@ -212,7 +247,7 @@
             AcceptButton = btnValidate;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(531, 752);
+            ClientSize = new Size(531, 793);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -245,6 +280,9 @@
         private GroupBox groupBox3;
         private DataGridView dgvModels;
         private Button btnModelDetails;
+        private Label lblModels;
+        private ComboBox cmbModels;
+        private Button btnLoadModels;
         private TextBox txtModelSearch;
         private Label lblModelSearch;
         private TextBox txtBaseUrl;

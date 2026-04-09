@@ -31,6 +31,8 @@
             menuStrip1 = new MenuStrip();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             keyValidatorToolStripMenuItem = new ToolStripMenuItem();
+            summerizerToolStripMenuItem = new ToolStripMenuItem();
+            sentimentAnalyzerToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
             pythonToolStripMenuItem = new ToolStripMenuItem();
@@ -51,7 +53,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { keyValidatorToolStripMenuItem, toolStripMenuItem1, exitToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { keyValidatorToolStripMenuItem, summerizerToolStripMenuItem, sentimentAnalyzerToolStripMenuItem, toolStripMenuItem1, exitToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(47, 20);
             toolsToolStripMenuItem.Text = "&Tools";
@@ -64,6 +66,19 @@
             keyValidatorToolStripMenuItem.Size = new Size(180, 22);
             keyValidatorToolStripMenuItem.Text = "&Key Validator";
             keyValidatorToolStripMenuItem.Click += OnKeyValidatorClick;
+            // 
+            // summerizerToolStripMenuItem
+            // 
+            summerizerToolStripMenuItem.Name = "summerizerToolStripMenuItem";
+            summerizerToolStripMenuItem.Size = new Size(180, 22);
+            summerizerToolStripMenuItem.Text = "&Summerizer";
+            summerizerToolStripMenuItem.Click += OnSummerizerClick;
+            // 
+            // sentimentAnalyzerToolStripMenuItem
+            // 
+            sentimentAnalyzerToolStripMenuItem.Name = "sentimentAnalyzerToolStripMenuItem";
+            sentimentAnalyzerToolStripMenuItem.Size = new Size(180, 22);
+            sentimentAnalyzerToolStripMenuItem.Text = "S&entiment Analyzer";
             // 
             // toolStripMenuItem1
             // 
@@ -134,5 +149,7 @@
         private ToolStripMenuItem funToolStripMenuItem;
         private ToolStripMenuItem crushCalcToolStripMenuItem;
         private ToolStripMenuItem quizToolStripMenuItem;
+        private ToolStripMenuItem summerizerToolStripMenuItem;
+        private ToolStripMenuItem sentimentAnalyzerToolStripMenuItem;
     }
 }

@@ -69,21 +69,10 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(12, 10);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(508, 200);
+            groupBox1.Size = new Size(508, 158);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Key Details";
-            // 
-            // btnModelDetails
-            // 
-            btnModelDetails.BackColor = SystemColors.ScrollBar;
-            btnModelDetails.Location = new Point(320, 107);
-            btnModelDetails.Name = "btnModelDetails";
-            btnModelDetails.Size = new Size(75, 40);
-            btnModelDetails.TabIndex = 5;
-            btnModelDetails.Text = "Model &Details";
-            btnModelDetails.UseVisualStyleBackColor = false;
-            btnModelDetails.Click += OnModelDetailsClick;
             // 
             // btnLoadModels
             // 
@@ -96,14 +85,6 @@
             btnLoadModels.UseVisualStyleBackColor = false;
             btnLoadModels.Click += OnLoadModelsClick;
             // 
-            // lblModels
-            // 
-            lblModels.AutoSize = true;
-            lblModels.Location = new Point(16, 167);
-            lblModels.Name = "lblModels";
-            lblModels.TabIndex = 8;
-            lblModels.Text = "Model";
-            // 
             // cmbModels
             // 
             cmbModels.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -112,6 +93,26 @@
             cmbModels.Name = "cmbModels";
             cmbModels.Size = new Size(240, 23);
             cmbModels.TabIndex = 7;
+            // 
+            // lblModels
+            // 
+            lblModels.AutoSize = true;
+            lblModels.Location = new Point(16, 167);
+            lblModels.Name = "lblModels";
+            lblModels.Size = new Size(41, 15);
+            lblModels.TabIndex = 8;
+            lblModels.Text = "Model";
+            // 
+            // btnModelDetails
+            // 
+            btnModelDetails.BackColor = SystemColors.ScrollBar;
+            btnModelDetails.Location = new Point(320, 107);
+            btnModelDetails.Name = "btnModelDetails";
+            btnModelDetails.Size = new Size(75, 40);
+            btnModelDetails.TabIndex = 5;
+            btnModelDetails.Text = "Model &Details";
+            btnModelDetails.UseVisualStyleBackColor = false;
+            btnModelDetails.Click += OnModelDetailsClick;
             // 
             // btnKeyDetails
             // 
@@ -190,7 +191,7 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(lblKeyDetails);
-            groupBox2.Location = new Point(12, 220);
+            groupBox2.Location = new Point(12, 177);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(508, 150);
             groupBox2.TabIndex = 1;
@@ -210,7 +211,7 @@
             groupBox3.Controls.Add(txtModelSearch);
             groupBox3.Controls.Add(lblModelSearch);
             groupBox3.Controls.Add(dgvModels);
-            groupBox3.Location = new Point(12, 384);
+            groupBox3.Location = new Point(12, 333);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(508, 403);
             groupBox3.TabIndex = 2;

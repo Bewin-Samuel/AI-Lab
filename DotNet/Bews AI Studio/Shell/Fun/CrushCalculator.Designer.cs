@@ -112,7 +112,6 @@
             txtCrush2.Name = "txtCrush2";
             txtCrush2.Size = new Size(251, 23);
             txtCrush2.TabIndex = 1;
-            txtCrush2.Text = "Shalini";
             // 
             // lblCrush2
             // 
@@ -129,7 +128,6 @@
             txtCrush1.Name = "txtCrush1";
             txtCrush1.Size = new Size(251, 23);
             txtCrush1.TabIndex = 1;
-            txtCrush1.Text = "Bewin";
             // 
             // label1
             // 

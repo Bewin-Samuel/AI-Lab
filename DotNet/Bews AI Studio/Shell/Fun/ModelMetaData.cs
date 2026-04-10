@@ -1,6 +1,6 @@
 ﻿namespace Shell.Fun
 {
-    internal class ModelData
+    internal class ModelMetaData
     {
         public Uri BaseUri { get; set; }
 

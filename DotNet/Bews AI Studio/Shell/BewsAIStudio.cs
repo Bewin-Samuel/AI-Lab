@@ -35,5 +35,10 @@ namespace Shell
         {
             ShowMdiChild(new Analyzer());
         }
+
+        private void OnAnalyzeClick(object sender, EventArgs e)
+        {
+            ShowMdiChild(new Analyzer());
+        }
     }
 }

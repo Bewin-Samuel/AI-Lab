@@ -56,13 +56,13 @@ namespace Shell.Fun
             }
         }
 
-        private static ModelData GetModelData()
+        private static ModelMetaData GetModelData()
         {
             var config = new ConfigurationBuilder()
                 .AddUserSecrets<CrushCalculator>()
                 .Build();
 
-            return new ModelData
+            return new ModelMetaData
             {
                 ApiKey = config["AzureOpenAI:ApiKey"]!,
                 BaseUri = new Uri(config["AzureOpenAI:BaseUri"]!),

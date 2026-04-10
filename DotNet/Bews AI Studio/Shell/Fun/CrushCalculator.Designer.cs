@@ -68,7 +68,7 @@
             chkStory.Location = new Point(270, 119);
             chkStory.Name = "chkStory";
             chkStory.Size = new Size(53, 19);
-            chkStory.TabIndex = 7;
+            chkStory.TabIndex = 5;
             chkStory.Text = "Story";
             chkStory.UseVisualStyleBackColor = true;
             // 
@@ -80,7 +80,7 @@
             chkHaiku.Location = new Point(270, 98);
             chkHaiku.Name = "chkHaiku";
             chkHaiku.Size = new Size(57, 19);
-            chkHaiku.TabIndex = 6;
+            chkHaiku.TabIndex = 4;
             chkHaiku.Text = "Haiku";
             chkHaiku.UseVisualStyleBackColor = true;
             // 
@@ -90,7 +90,7 @@
             btnAskAI.Location = new Point(189, 96);
             btnAskAI.Name = "btnAskAI";
             btnAskAI.Size = new Size(75, 43);
-            btnAskAI.TabIndex = 5;
+            btnAskAI.TabIndex = 3;
             btnAskAI.Text = "&Ask AI";
             btnAskAI.UseVisualStyleBackColor = false;
             btnAskAI.Click += OnAskAI;
@@ -101,7 +101,7 @@
             btnCalculate.Location = new Point(97, 96);
             btnCalculate.Name = "btnCalculate";
             btnCalculate.Size = new Size(75, 43);
-            btnCalculate.TabIndex = 5;
+            btnCalculate.TabIndex = 2;
             btnCalculate.Text = "&Calculate";
             btnCalculate.UseVisualStyleBackColor = false;
             btnCalculate.Click += OnCalculateClick;
@@ -127,7 +127,7 @@
             txtCrush1.Location = new Point(89, 26);
             txtCrush1.Name = "txtCrush1";
             txtCrush1.Size = new Size(251, 23);
-            txtCrush1.TabIndex = 1;
+            txtCrush1.TabIndex = 0;
             // 
             // label1
             // 
@@ -143,7 +143,7 @@
             groupBox2.Controls.Add(lblFlameResult);
             groupBox2.Location = new Point(12, 174);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(360, 310);
+            groupBox2.Size = new Size(360, 472);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Calculations...";
@@ -157,7 +157,7 @@
             lblFlameResult.Name = "lblFlameResult";
             lblFlameResult.ReadOnly = true;
             lblFlameResult.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
-            lblFlameResult.Size = new Size(354, 288);
+            lblFlameResult.Size = new Size(354, 450);
             lblFlameResult.TabIndex = 0;
             lblFlameResult.TabStop = false;
             lblFlameResult.Text = "";
@@ -166,7 +166,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(389, 500);
+            ClientSize = new Size(389, 658);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             MaximizeBox = false;

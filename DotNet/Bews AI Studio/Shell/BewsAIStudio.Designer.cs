@@ -39,6 +39,7 @@
             funToolStripMenuItem = new ToolStripMenuItem();
             crushCalcToolStripMenuItem = new ToolStripMenuItem();
             quizToolStripMenuItem = new ToolStripMenuItem();
+            analyzerToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -53,7 +54,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { keyValidatorToolStripMenuItem, summerizerToolStripMenuItem, sentimentAnalyzerToolStripMenuItem, toolStripMenuItem1, exitToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { keyValidatorToolStripMenuItem, analyzerToolStripMenuItem, summerizerToolStripMenuItem, sentimentAnalyzerToolStripMenuItem, toolStripMenuItem1, exitToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(47, 20);
             toolsToolStripMenuItem.Text = "&Tools";
@@ -71,7 +72,7 @@
             // 
             summerizerToolStripMenuItem.Name = "summerizerToolStripMenuItem";
             summerizerToolStripMenuItem.Size = new Size(180, 22);
-            summerizerToolStripMenuItem.Text = "&Summerizer";
+            summerizerToolStripMenuItem.Text = "Summarizer";
             summerizerToolStripMenuItem.Click += OnSummerizerClick;
             // 
             // sentimentAnalyzerToolStripMenuItem
@@ -110,15 +111,22 @@
             crushCalcToolStripMenuItem.Name = "crushCalcToolStripMenuItem";
             crushCalcToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
             crushCalcToolStripMenuItem.ShowShortcutKeys = false;
-            crushCalcToolStripMenuItem.Size = new Size(180, 22);
+            crushCalcToolStripMenuItem.Size = new Size(124, 22);
             crushCalcToolStripMenuItem.Text = "&Crush Calc";
             crushCalcToolStripMenuItem.Click += OnCrushCalcClick;
             // 
             // quizToolStripMenuItem
             // 
             quizToolStripMenuItem.Name = "quizToolStripMenuItem";
-            quizToolStripMenuItem.Size = new Size(180, 22);
+            quizToolStripMenuItem.Size = new Size(124, 22);
             quizToolStripMenuItem.Text = "&Quiz";
+            // 
+            // analyzerToolStripMenuItem
+            // 
+            analyzerToolStripMenuItem.Name = "analyzerToolStripMenuItem";
+            analyzerToolStripMenuItem.Size = new Size(180, 22);
+            analyzerToolStripMenuItem.Text = "&Analyzer";
+            analyzerToolStripMenuItem.Click += OnAnalyzeClick;
             // 
             // BewsAIStudio
             // 
@@ -151,5 +159,6 @@
         private ToolStripMenuItem quizToolStripMenuItem;
         private ToolStripMenuItem summerizerToolStripMenuItem;
         private ToolStripMenuItem sentimentAnalyzerToolStripMenuItem;
+        private ToolStripMenuItem analyzerToolStripMenuItem;
     }
 }

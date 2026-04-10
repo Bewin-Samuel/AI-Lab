@@ -4,7 +4,7 @@ using Azure.AI.OpenAI;
 
 namespace Shell.Fun
 {
-    internal class ModelFacilitator(ModelData data)
+    internal class ModelFacilitator(ModelMetaData data)
     {
         private ChatClient ChatClient 
         {
@@ -47,7 +47,7 @@ namespace Shell.Fun
             [
                 new SystemChatMessage("You are an Expert in creating short stories."),
                 new SystemChatMessage("Make sure the relationship coming in the user chat message reflects in the Story"),
-                new SystemChatMessage("Let not the story exceed, 500 chars"),
+                new SystemChatMessage("Let not the story exceed, 50 words"),
                 new UserChatMessage($"{crush1} and {crush2} shares {relationship}. Get me a beautiful short story based on that."),
             ];
 

@@ -44,9 +44,6 @@ namespace Shell.Tools
 
         private async void OnAnalyzeClick(object sender, EventArgs e)
         {
-            if (!await TryLoadContentFromPathAsync())
-                return;
-
             var content = rtbContent.Text;
 
             if (string.IsNullOrWhiteSpace(content))
@@ -93,31 +90,6 @@ namespace Shell.Tools
             finally
             {
                 btnAnalyze.Enabled = chkSummerize.Checked || chkSentiment.Checked;
-                Cursor = Cursors.Default;
-            }
-        }
-
-        private async Task<bool> TryLoadContentFromPathAsync()
-        {
-            var path = txtFileOrUrlPath.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(path))
-                return true;
-
-            Cursor = Cursors.WaitCursor;
-
-            try
-            {
-                rtbContent.Text = await ContentReader.ReadAsync(path);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Unable to load content: {ex.Message}", "Analyze", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            finally
-            {
                 Cursor = Cursors.Default;
             }
         }
@@ -212,19 +184,42 @@ namespace Shell.Tools
                 cmbModels.SelectedIndex = 0;
         }
 
-        private void OnFileUpload(object sender, EventArgs e)
+        private async void OnFileUpload(object sender, EventArgs e)
         {
-            using var dialog = new OpenFileDialog
+            var path = txtFileOrUrlPath.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(path))
             {
-                Title = "Select a file to analyze",
-                Filter = ContentReader.FileDialogFilter,
-                FilterIndex = 1
-            };
+                using var dialog = new OpenFileDialog
+                {
+                    Title = "Select a file to analyze",
+                    Filter = ContentReader.FileDialogFilter,
+                    FilterIndex = 1
+                };
 
-            if (dialog.ShowDialog() != DialogResult.OK)
-                return;
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
 
-            txtFileOrUrlPath.Text = dialog.FileName;
+                path = dialog.FileName;
+                txtFileOrUrlPath.Text = path;
+            }
+
+            btnUploadFile.Enabled = false;
+            Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                rtbContent.Text = await ContentReader.ReadAsync(path);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unable to load content: {ex.Message}", "Load Content", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnUploadFile.Enabled = true;
+                Cursor = Cursors.Default;
+            }
         }
     }
 }

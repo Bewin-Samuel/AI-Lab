@@ -28,10 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            groupBox1 = new GroupBox();
-            btnAnalyze = new Button();
-            rtbContent = new RichTextBox();
-            label1 = new Label();
             groupBox2 = new GroupBox();
             rtbResult = new RichTextBox();
             lblResult = new Label();
@@ -43,55 +39,23 @@
             label2 = new Label();
             cmbModels = new ComboBox();
             label5 = new Label();
-            txtProviders = new ComboBox();
+            cmbModelProviders = new ComboBox();
             label4 = new Label();
-            chkSentiment = new CheckBox();
+            rtbContent = new RichTextBox();
+            btnAnalyze = new Button();
             chkSummerize = new CheckBox();
-            groupBox1.SuspendLayout();
+            chkSentiment = new CheckBox();
+            label6 = new Label();
+            txtFileOrUrlPath = new TextBox();
+            txtSummerizeLength = new TextBox();
+            btnUploadFile = new Button();
+            txtSentimentLength = new TextBox();
+            groupBox1 = new GroupBox();
+            btnTxtLoad = new Button();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(chkSentiment);
-            groupBox1.Controls.Add(chkSummerize);
-            groupBox1.Controls.Add(btnAnalyze);
-            groupBox1.Controls.Add(rtbContent);
-            groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(19, 197);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(769, 347);
-            groupBox1.TabIndex = 0;
-            groupBox1.TabStop = false;
-            // 
-            // btnAnalyze
-            // 
-            btnAnalyze.BackColor = SystemColors.ScrollBar;
-            btnAnalyze.Location = new Point(342, 297);
-            btnAnalyze.Name = "btnAnalyze";
-            btnAnalyze.Size = new Size(85, 40);
-            btnAnalyze.TabIndex = 4;
-            btnAnalyze.Text = "&Analyze";
-            btnAnalyze.UseVisualStyleBackColor = false;
-            btnAnalyze.Click += OnAnalyzeClick;
-            // 
-            // rtbContent
-            // 
-            rtbContent.Location = new Point(24, 45);
-            rtbContent.Name = "rtbContent";
-            rtbContent.Size = new Size(726, 246);
-            rtbContent.TabIndex = 1;
-            rtbContent.Text = "";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(9, 20);
-            label1.Name = "label1";
-            label1.Size = new Size(53, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Content:";
             // 
             // groupBox2
             // 
@@ -129,7 +93,7 @@
             groupBox3.Controls.Add(label2);
             groupBox3.Controls.Add(cmbModels);
             groupBox3.Controls.Add(label5);
-            groupBox3.Controls.Add(txtProviders);
+            groupBox3.Controls.Add(cmbModelProviders);
             groupBox3.Controls.Add(label4);
             groupBox3.Location = new Point(19, 7);
             groupBox3.Name = "groupBox3";
@@ -200,15 +164,15 @@
             label5.TabIndex = 0;
             label5.Text = "Models";
             // 
-            // txtProviders
+            // cmbModelProviders
             // 
-            txtProviders.DropDownStyle = ComboBoxStyle.DropDownList;
-            txtProviders.FormattingEnabled = true;
-            txtProviders.Location = new Point(129, 24);
-            txtProviders.Name = "txtProviders";
-            txtProviders.Size = new Size(358, 23);
-            txtProviders.TabIndex = 0;
-            txtProviders.SelectedIndexChanged += OnProviderChanged;
+            cmbModelProviders.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbModelProviders.FormattingEnabled = true;
+            cmbModelProviders.Location = new Point(129, 24);
+            cmbModelProviders.Name = "cmbModelProviders";
+            cmbModelProviders.Size = new Size(358, 23);
+            cmbModelProviders.TabIndex = 0;
+            cmbModelProviders.SelectedIndexChanged += OnProviderChanged;
             // 
             // label4
             // 
@@ -219,10 +183,42 @@
             label4.TabIndex = 0;
             label4.Text = "Providers";
             // 
+            // rtbContent
+            // 
+            rtbContent.Location = new Point(16, 22);
+            rtbContent.Name = "rtbContent";
+            rtbContent.Size = new Size(734, 252);
+            rtbContent.TabIndex = 1;
+            rtbContent.Text = "";
+            // 
+            // btnAnalyze
+            // 
+            btnAnalyze.BackColor = SystemColors.ScrollBar;
+            btnAnalyze.Location = new Point(544, 283);
+            btnAnalyze.Name = "btnAnalyze";
+            btnAnalyze.Size = new Size(70, 50);
+            btnAnalyze.TabIndex = 4;
+            btnAnalyze.Text = "&Analyze";
+            btnAnalyze.UseVisualStyleBackColor = false;
+            btnAnalyze.Click += OnAnalyzeClick;
+            // 
+            // chkSummerize
+            // 
+            chkSummerize.AutoSize = true;
+            chkSummerize.Checked = true;
+            chkSummerize.CheckState = CheckState.Checked;
+            chkSummerize.Location = new Point(629, 283);
+            chkSummerize.Name = "chkSummerize";
+            chkSummerize.Size = new Size(85, 19);
+            chkSummerize.TabIndex = 6;
+            chkSummerize.Text = "S&ummerize";
+            chkSummerize.UseVisualStyleBackColor = true;
+            chkSummerize.CheckedChanged += OnAnalysisOptionChanged;
+            // 
             // chkSentiment
             // 
             chkSentiment.AutoSize = true;
-            chkSentiment.Location = new Point(444, 318);
+            chkSentiment.Location = new Point(629, 312);
             chkSentiment.Name = "chkSentiment";
             chkSentiment.Size = new Size(80, 19);
             chkSentiment.TabIndex = 7;
@@ -230,18 +226,75 @@
             chkSentiment.UseVisualStyleBackColor = true;
             chkSentiment.CheckedChanged += OnAnalysisOptionChanged;
             // 
-            // chkSummerize
+            // label6
             // 
-            chkSummerize.AutoSize = true;
-            chkSummerize.Checked = true;
-            chkSummerize.CheckState = CheckState.Checked;
-            chkSummerize.Location = new Point(444, 297);
-            chkSummerize.Name = "chkSummerize";
-            chkSummerize.Size = new Size(85, 19);
-            chkSummerize.TabIndex = 6;
-            chkSummerize.Text = "S&ummerize";
-            chkSummerize.UseVisualStyleBackColor = true;
-            chkSummerize.CheckedChanged += OnAnalysisOptionChanged;
+            label6.AutoSize = true;
+            label6.Location = new Point(24, 301);
+            label6.Name = "label6";
+            label6.Size = new Size(84, 15);
+            label6.TabIndex = 8;
+            label6.Text = "FilePath or Url:";
+            // 
+            // txtFileOrUrlPath
+            // 
+            txtFileOrUrlPath.Location = new Point(114, 297);
+            txtFileOrUrlPath.Name = "txtFileOrUrlPath";
+            txtFileOrUrlPath.Size = new Size(183, 23);
+            txtFileOrUrlPath.TabIndex = 9;
+            // 
+            // txtSummerizeLength
+            // 
+            txtSummerizeLength.Location = new Point(715, 281);
+            txtSummerizeLength.Name = "txtSummerizeLength";
+            txtSummerizeLength.Size = new Size(35, 23);
+            txtSummerizeLength.TabIndex = 9;
+            // 
+            // btnUploadFile
+            // 
+            btnUploadFile.BackColor = SystemColors.ScrollBar;
+            btnUploadFile.Location = new Point(303, 295);
+            btnUploadFile.Name = "btnUploadFile";
+            btnUploadFile.Size = new Size(31, 26);
+            btnUploadFile.TabIndex = 10;
+            btnUploadFile.Text = "...";
+            btnUploadFile.UseVisualStyleBackColor = false;
+            btnUploadFile.Click += OnFileUpload;
+            // 
+            // txtSentimentLength
+            // 
+            txtSentimentLength.Location = new Point(715, 310);
+            txtSentimentLength.Name = "txtSentimentLength";
+            txtSentimentLength.Size = new Size(35, 23);
+            txtSentimentLength.TabIndex = 11;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(btnTxtLoad);
+            groupBox1.Controls.Add(txtSentimentLength);
+            groupBox1.Controls.Add(btnUploadFile);
+            groupBox1.Controls.Add(txtSummerizeLength);
+            groupBox1.Controls.Add(txtFileOrUrlPath);
+            groupBox1.Controls.Add(label6);
+            groupBox1.Controls.Add(chkSentiment);
+            groupBox1.Controls.Add(chkSummerize);
+            groupBox1.Controls.Add(btnAnalyze);
+            groupBox1.Controls.Add(rtbContent);
+            groupBox1.Location = new Point(19, 197);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(769, 347);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Content:";
+            // 
+            // btnTxtLoad
+            // 
+            btnTxtLoad.BackColor = SystemColors.ScrollBar;
+            btnTxtLoad.Location = new Point(340, 295);
+            btnTxtLoad.Name = "btnTxtLoad";
+            btnTxtLoad.Size = new Size(57, 26);
+            btnTxtLoad.TabIndex = 12;
+            btnTxtLoad.Text = "&Load";
+            btnTxtLoad.UseVisualStyleBackColor = false;
             // 
             // Analyzer
             // 
@@ -255,21 +308,16 @@
             ShowInTaskbar = false;
             Text = "Analyzer";
             Load += OnFormLoad;
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private GroupBox groupBox1;
-        private Label label1;
-        private RichTextBox rtbContent;
-        private Button btnAnalyze;
         private GroupBox groupBox2;
         private RichTextBox rtbResult;
         private Label lblResult;
@@ -278,12 +326,21 @@
         private Label label3;
         private TextBox txtApiKey;
         private Label label2;
-        private ComboBox txtProviders;
+        private ComboBox cmbModelProviders;
         private Label label4;
         private ComboBox cmbModels;
         private Label label5;
         private Button btnLoad;
-        private CheckBox chkSentiment;
+        private RichTextBox rtbContent;
+        private Button btnAnalyze;
         private CheckBox chkSummerize;
+        private CheckBox chkSentiment;
+        private Label label6;
+        private TextBox txtFileOrUrlPath;
+        private TextBox txtSummerizeLength;
+        private Button btnUploadFile;
+        private TextBox txtSentimentLength;
+        private GroupBox groupBox1;
+        private Button btnTxtLoad;
     }
 }

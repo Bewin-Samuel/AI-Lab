@@ -44,6 +44,9 @@ namespace Shell.Tools
 
         private async void OnAnalyzeClick(object sender, EventArgs e)
         {
+            if (!await TryLoadContentFromPathAsync())
+                return;
+
             var content = rtbContent.Text;
 
             if (string.IsNullOrWhiteSpace(content))
@@ -69,9 +72,9 @@ namespace Shell.Tools
                 return;
             }
 
-            var provider = txtProviders.SelectedItem?.ToString() ?? string.Empty;
-            var modelId  = _loadedModels[cmbModels.SelectedIndex].Id;
-            var baseUrl  = txtBaseUrl.Text.Trim();
+            var provider = cmbModelProviders.SelectedItem?.ToString() ?? string.Empty;
+            var modelId = _loadedModels[cmbModels.SelectedIndex].Id;
+            var baseUrl = txtBaseUrl.Text.Trim();
 
             btnAnalyze.Enabled = false;
             Cursor = Cursors.WaitCursor;
@@ -94,6 +97,31 @@ namespace Shell.Tools
             }
         }
 
+        private async Task<bool> TryLoadContentFromPathAsync()
+        {
+            var path = txtFileOrUrlPath.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(path))
+                return true;
+
+            Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                rtbContent.Text = await ContentReader.ReadAsync(path);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unable to load content: {ex.Message}", "Analyze", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
         private async Task<List<string>> ExecuteSelectedAnalysesAsync(IChatCompletionProvider chatProvider, string content)
         {
             var results = new List<string>();
@@ -109,18 +137,18 @@ namespace Shell.Tools
 
         private void LoadTypeDropdown()
         {
-            txtProviders.Items.Clear();
+            cmbModelProviders.Items.Clear();
 
-            txtProviders.Items.Add("Azure Open AI");
-            txtProviders.Items.Add("Open Router");
-            txtProviders.Items.Add("Open AI");
-            txtProviders.Items.Add("Hugging Face");
-            txtProviders.Items.Add("Gemini");
-            txtProviders.Items.Add("GitHub");
+            cmbModelProviders.Items.Add("Azure Open AI");
+            cmbModelProviders.Items.Add("Gemini");
+            cmbModelProviders.Items.Add("GitHub");
+            cmbModelProviders.Items.Add("Hugging Face");
+            cmbModelProviders.Items.Add("Open AI");
+            cmbModelProviders.Items.Add("Open Router");
 
-            txtProviders.Sorted = true;
+            cmbModelProviders.Sorted = true;
 
-            txtProviders.SelectedIndex = 0;
+            cmbModelProviders.SelectedIndex = cmbModelProviders.Items.Count -1;
         }
 
         private void OnProviderChanged(object? sender, EventArgs e)
@@ -142,7 +170,7 @@ namespace Shell.Tools
                 return;
             }
 
-            var provider = txtProviders.SelectedItem?.ToString() ?? string.Empty;
+            var provider = cmbModelProviders.SelectedItem?.ToString() ?? string.Empty;
 
             btnLoad.Enabled = false;
             Cursor = Cursors.WaitCursor;
@@ -182,6 +210,21 @@ namespace Shell.Tools
 
             if (cmbModels.Items.Count > 0)
                 cmbModels.SelectedIndex = 0;
+        }
+
+        private void OnFileUpload(object sender, EventArgs e)
+        {
+            using var dialog = new OpenFileDialog
+            {
+                Title = "Select a file to analyze",
+                Filter = ContentReader.FileDialogFilter,
+                FilterIndex = 1
+            };
+
+            if (dialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            txtFileOrUrlPath.Text = dialog.FileName;
         }
     }
 }

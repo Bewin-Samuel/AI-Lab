@@ -9,3 +9,6 @@
 
 ## Secret Store:
 * The right approach for a .NET app is User Secrets — secrets are stored in your user profile (%APPDATA%\Microsoft\UserSecrets\) and never in the project directory, so they can never be accidentally committed.
+
+## Bugs:
+* .msg file loading is not working.

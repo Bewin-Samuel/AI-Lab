@@ -16,10 +16,15 @@ namespace Shell.Tools
             <provide a concise summary>
 
             Actions:
-            <list actionable items>
+              • <list actionable items> - <Name if available>
+            """;
+
+        private const string SentimentPrompt = """
+            You are an Expert in analyzing the sentiment of the given content.
+            Always format your response exactly as follows:
 
             Sentiments:
-            <describe the overall sentiment>
+            <Precisely describe the overall sentiment not exeeding 20 - 30 words>
             """;
 
         public Analyzer()
@@ -32,13 +37,18 @@ namespace Shell.Tools
             LoadTypeDropdown();
         }
 
-        private async void OnSummerizeClick(object sender, EventArgs e)
+        private void OnAnalysisOptionChanged(object? sender, EventArgs e)
+        {
+            btnAnalyze.Enabled = chkSummerize.Checked || chkSentiment.Checked;
+        }
+
+        private async void OnAnalyzeClick(object sender, EventArgs e)
         {
             var content = rtbContent.Text;
 
             if (string.IsNullOrWhiteSpace(content))
             {
-                MessageBox.Show("Please enter content to summarize.", "Summarize", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter content to analyze.", "Analyze", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 rtbContent.Focus();
                 return;
             }
@@ -47,14 +57,14 @@ namespace Shell.Tools
 
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                MessageBox.Show("Please enter an API Key.", "Summarize", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter an API Key.", "Analyze", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtApiKey.Focus();
                 return;
             }
 
             if (cmbModels.SelectedIndex < 0 || cmbModels.SelectedIndex >= _loadedModels.Count)
             {
-                MessageBox.Show("Please load and select a model.", "Summarize", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please load and select a model.", "Analyze", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbModels.Focus();
                 return;
             }
@@ -70,18 +80,31 @@ namespace Shell.Tools
             try
             {
                 var chatProvider = ChatProviderFactory.Create(provider, apiKey, modelId, baseUrl);
-                var result = await chatProvider.CompleteChatAsync(SummarizationPrompt, content);
-                rtbResult.Text = result;
+                var results = await ExecuteSelectedAnalysesAsync(chatProvider, content);
+                rtbResult.Text = string.Join(Environment.NewLine + Environment.NewLine, results);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Unable to summarize content: {ex.Message}", "Summarize", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Unable to analyze content: {ex.Message}", "Analyze", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
-                btnAnalyze.Enabled = true;
+                btnAnalyze.Enabled = chkSummerize.Checked || chkSentiment.Checked;
                 Cursor = Cursors.Default;
             }
+        }
+
+        private async Task<List<string>> ExecuteSelectedAnalysesAsync(IChatCompletionProvider chatProvider, string content)
+        {
+            var results = new List<string>();
+
+            if (chkSummerize.Checked)
+                results.Add(await chatProvider.CompleteChatAsync(SummarizationPrompt, content));
+
+            if (chkSentiment.Checked)
+                results.Add(await chatProvider.CompleteChatAsync(SentimentPrompt, content));
+
+            return results;
         }
 
         private void LoadTypeDropdown()

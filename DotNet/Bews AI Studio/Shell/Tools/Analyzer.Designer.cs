@@ -45,6 +45,8 @@
             label5 = new Label();
             txtProviders = new ComboBox();
             label4 = new Label();
+            chkSentiment = new CheckBox();
+            chkSummerize = new CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -52,6 +54,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(chkSentiment);
+            groupBox1.Controls.Add(chkSummerize);
             groupBox1.Controls.Add(btnAnalyze);
             groupBox1.Controls.Add(rtbContent);
             groupBox1.Controls.Add(label1);
@@ -70,7 +74,7 @@
             btnAnalyze.TabIndex = 4;
             btnAnalyze.Text = "&Analyze";
             btnAnalyze.UseVisualStyleBackColor = false;
-            btnAnalyze.Click += OnSummerizeClick;
+            btnAnalyze.Click += OnAnalyzeClick;
             // 
             // rtbContent
             // 
@@ -215,6 +219,30 @@
             label4.TabIndex = 0;
             label4.Text = "Providers";
             // 
+            // chkSentiment
+            // 
+            chkSentiment.AutoSize = true;
+            chkSentiment.Location = new Point(444, 318);
+            chkSentiment.Name = "chkSentiment";
+            chkSentiment.Size = new Size(80, 19);
+            chkSentiment.TabIndex = 7;
+            chkSentiment.Text = "&Sentiment";
+            chkSentiment.UseVisualStyleBackColor = true;
+            chkSentiment.CheckedChanged += OnAnalysisOptionChanged;
+            // 
+            // chkSummerize
+            // 
+            chkSummerize.AutoSize = true;
+            chkSummerize.Checked = true;
+            chkSummerize.CheckState = CheckState.Checked;
+            chkSummerize.Location = new Point(444, 297);
+            chkSummerize.Name = "chkSummerize";
+            chkSummerize.Size = new Size(85, 19);
+            chkSummerize.TabIndex = 6;
+            chkSummerize.Text = "S&ummerize";
+            chkSummerize.UseVisualStyleBackColor = true;
+            chkSummerize.CheckedChanged += OnAnalysisOptionChanged;
+            // 
             // Analyzer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -255,5 +283,7 @@
         private ComboBox cmbModels;
         private Label label5;
         private Button btnLoad;
+        private CheckBox chkSentiment;
+        private CheckBox chkSummerize;
     }
 }

@@ -30,7 +30,7 @@ class SidebarConfigurator:
         st.sidebar.title("⚙️ **Quiz Configuration**")
 
         # ===== SECTION 1: Model Configuration =====
-        st.sidebar.subheader("🤖 Section 1: AI Model Configuration")
+        st.sidebar.subheader("🤖 AI Model Configuration")
 
         # Model Vendor dropdown
         vendor_options = [v.value for v in ModelVendor]
@@ -60,7 +60,7 @@ class SidebarConfigurator:
 
         # ===== SECTION 2: Quiz Criteria =====
         st.sidebar.markdown("---")
-        st.sidebar.subheader("📝 Section 2: Quiz Criteria")
+        st.sidebar.subheader("📝 Quiz Criteria")
 
         age_group = st.sidebar.selectbox(
             label="Age Group",

@@ -32,7 +32,7 @@
             rtbResult = new RichTextBox();
             lblResult = new Label();
             groupBox3 = new GroupBox();
-            btnLoad = new Button();
+            btnLoadModels = new Button();
             txtBaseUrl = new TextBox();
             label3 = new Label();
             txtApiKey = new TextBox();
@@ -51,7 +51,7 @@
             btnUploadFile = new Button();
             txtSentimentLength = new TextBox();
             groupBox1 = new GroupBox();
-            btnTxtLoad = new Button();
+            btnLoadFileOrUrl = new Button();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -86,7 +86,7 @@
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(btnLoad);
+            groupBox3.Controls.Add(btnLoadModels);
             groupBox3.Controls.Add(txtBaseUrl);
             groupBox3.Controls.Add(label3);
             groupBox3.Controls.Add(txtApiKey);
@@ -102,16 +102,16 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Key Details";
             // 
-            // btnLoad
+            // btnLoadModels
             // 
-            btnLoad.BackColor = SystemColors.ScrollBar;
-            btnLoad.Location = new Point(512, 24);
-            btnLoad.Name = "btnLoad";
-            btnLoad.Size = new Size(85, 137);
-            btnLoad.TabIndex = 5;
-            btnLoad.Text = "&Load Models";
-            btnLoad.UseVisualStyleBackColor = false;
-            btnLoad.Click += OnLoadModelsClick;
+            btnLoadModels.BackColor = SystemColors.ScrollBar;
+            btnLoadModels.Location = new Point(512, 24);
+            btnLoadModels.Name = "btnLoadModels";
+            btnLoadModels.Size = new Size(85, 137);
+            btnLoadModels.TabIndex = 5;
+            btnLoadModels.Text = "&Load Models";
+            btnLoadModels.UseVisualStyleBackColor = false;
+            btnLoadModels.Click += OnLoadModelsClick;
             // 
             // txtBaseUrl
             // 
@@ -269,7 +269,7 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(btnTxtLoad);
+            groupBox1.Controls.Add(btnLoadFileOrUrl);
             groupBox1.Controls.Add(txtSentimentLength);
             groupBox1.Controls.Add(btnUploadFile);
             groupBox1.Controls.Add(txtSummerizeLength);
@@ -286,15 +286,16 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Content:";
             // 
-            // btnTxtLoad
+            // btnLoadFileOrUrl
             // 
-            btnTxtLoad.BackColor = SystemColors.ScrollBar;
-            btnTxtLoad.Location = new Point(340, 295);
-            btnTxtLoad.Name = "btnTxtLoad";
-            btnTxtLoad.Size = new Size(57, 26);
-            btnTxtLoad.TabIndex = 12;
-            btnTxtLoad.Text = "&Load";
-            btnTxtLoad.UseVisualStyleBackColor = false;
+            btnLoadFileOrUrl.BackColor = SystemColors.ScrollBar;
+            btnLoadFileOrUrl.Location = new Point(340, 295);
+            btnLoadFileOrUrl.Name = "btnLoadFileOrUrl";
+            btnLoadFileOrUrl.Size = new Size(57, 26);
+            btnLoadFileOrUrl.TabIndex = 12;
+            btnLoadFileOrUrl.Text = "&Load";
+            btnLoadFileOrUrl.UseVisualStyleBackColor = false;
+            btnLoadFileOrUrl.Click += OnLoadFileOrUrl;
             // 
             // Analyzer
             // 
@@ -330,7 +331,7 @@
         private Label label4;
         private ComboBox cmbModels;
         private Label label5;
-        private Button btnLoad;
+        private Button btnLoadModels;
         private RichTextBox rtbContent;
         private Button btnAnalyze;
         private CheckBox chkSummerize;
@@ -341,6 +342,6 @@
         private Button btnUploadFile;
         private TextBox txtSentimentLength;
         private GroupBox groupBox1;
-        private Button btnTxtLoad;
+        private Button btnLoadFileOrUrl;
     }
 }

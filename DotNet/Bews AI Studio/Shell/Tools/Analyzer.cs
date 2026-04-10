@@ -120,7 +120,7 @@ namespace Shell.Tools
 
             cmbModelProviders.Sorted = true;
 
-            cmbModelProviders.SelectedIndex = cmbModelProviders.Items.Count -1;
+            cmbModelProviders.SelectedIndex = cmbModelProviders.Items.Count - 1;
         }
 
         private void OnProviderChanged(object? sender, EventArgs e)
@@ -144,7 +144,7 @@ namespace Shell.Tools
 
             var provider = cmbModelProviders.SelectedItem?.ToString() ?? string.Empty;
 
-            btnLoad.Enabled = false;
+            btnLoadModels.Enabled = false;
             Cursor = Cursors.WaitCursor;
 
             try
@@ -167,7 +167,7 @@ namespace Shell.Tools
             }
             finally
             {
-                btnLoad.Enabled = true;
+                btnLoadModels.Enabled = true;
                 Cursor = Cursors.Default;
             }
         }
@@ -186,29 +186,28 @@ namespace Shell.Tools
 
         private async void OnFileUpload(object sender, EventArgs e)
         {
-            var path = txtFileOrUrlPath.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(path))
+            using var dialog = new OpenFileDialog
             {
-                using var dialog = new OpenFileDialog
-                {
-                    Title = "Select a file to analyze",
-                    Filter = ContentReader.FileDialogFilter,
-                    FilterIndex = 1
-                };
+                Title = "Select a file to analyze",
+                Filter = ContentReader.FileDialogFilter,
+                FilterIndex = 1
+            };
 
-                if (dialog.ShowDialog() != DialogResult.OK)
-                    return;
+            if (dialog.ShowDialog() != DialogResult.OK)
+                return;
 
-                path = dialog.FileName;
-                txtFileOrUrlPath.Text = path;
-            }
+            var path = dialog.FileName;
+            txtFileOrUrlPath.Text = path.Trim();
 
             btnUploadFile.Enabled = false;
-            Cursor = Cursors.WaitCursor;
+        }
 
+        private async void OnLoadFileOrUrl(object sender, EventArgs e)
+        {
             try
             {
+                Cursor = Cursors.WaitCursor;
+                var path = txtFileOrUrlPath.Text.Trim();
                 rtbContent.Text = await ContentReader.ReadAsync(path);
             }
             catch (Exception ex)
@@ -218,6 +217,9 @@ namespace Shell.Tools
             finally
             {
                 btnUploadFile.Enabled = true;
+            }
+            finally
+            {
                 Cursor = Cursors.Default;
             }
         }

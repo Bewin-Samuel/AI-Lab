@@ -31,6 +31,7 @@
             menuStrip1 = new MenuStrip();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             keyValidatorToolStripMenuItem = new ToolStripMenuItem();
+            analyzerToolStripMenuItem = new ToolStripMenuItem();
             summerizerToolStripMenuItem = new ToolStripMenuItem();
             sentimentAnalyzerToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripSeparator();
@@ -39,7 +40,6 @@
             funToolStripMenuItem = new ToolStripMenuItem();
             crushCalcToolStripMenuItem = new ToolStripMenuItem();
             quizToolStripMenuItem = new ToolStripMenuItem();
-            analyzerToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -67,6 +67,14 @@
             keyValidatorToolStripMenuItem.Size = new Size(180, 22);
             keyValidatorToolStripMenuItem.Text = "&Key Validator";
             keyValidatorToolStripMenuItem.Click += OnKeyValidatorClick;
+            // 
+            // analyzerToolStripMenuItem
+            // 
+            analyzerToolStripMenuItem.Name = "analyzerToolStripMenuItem";
+            analyzerToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.A;
+            analyzerToolStripMenuItem.Size = new Size(180, 22);
+            analyzerToolStripMenuItem.Text = "&Analyzer";
+            analyzerToolStripMenuItem.Click += OnAnalyzeClick;
             // 
             // summerizerToolStripMenuItem
             // 
@@ -120,13 +128,6 @@
             quizToolStripMenuItem.Name = "quizToolStripMenuItem";
             quizToolStripMenuItem.Size = new Size(124, 22);
             quizToolStripMenuItem.Text = "&Quiz";
-            // 
-            // analyzerToolStripMenuItem
-            // 
-            analyzerToolStripMenuItem.Name = "analyzerToolStripMenuItem";
-            analyzerToolStripMenuItem.Size = new Size(180, 22);
-            analyzerToolStripMenuItem.Text = "&Analyzer";
-            analyzerToolStripMenuItem.Click += OnAnalyzeClick;
             // 
             // BewsAIStudio
             // 
